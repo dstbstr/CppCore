@@ -1,0 +1,4 @@
+**/Build/*
+**/bin/*
+**/.vs/*
+**/c_cpp_properties.json
