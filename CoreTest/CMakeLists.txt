@@ -1,6 +1,6 @@
 project(CoreTest)
 
-add_executable(${PROJECT_NAME} src/Main.cpp)
+add_executable(${PROJECT_NAME} src/Main.cpp "src/Threading/Runner2.test.cpp")
 
 target_link_libraries(${PROJECT_NAME} gtest)
 target_link_libraries(${PROJECT_NAME} gmock)
