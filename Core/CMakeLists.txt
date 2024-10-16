@@ -10,29 +10,29 @@ target_compile_options(${PROJECT_NAME} PRIVATE
           /W4 /WX /EHsc>)
 
 target_sources(${PROJECT_NAME} PRIVATE
-	"src/Algorithms/AStar.test.cpp"
-	"src/Algorithms/Shoelace.test.cpp"
-	"src/Algorithms/ShuntingYard.test.cpp"
+	src/Algorithms/AStar.test.cpp
+	src/Algorithms/Shoelace.test.cpp
+	src/Algorithms/ShuntingYard.test.cpp
 
-	"src/Constexpr/ConstexprAlgorithms.cpp"
-	"src/Constexpr/ConstexprCollections.cpp"
-	"src/Constexpr/ConstexprGeometry.cpp"
-	"src/Constexpr/ConstexprMath.cpp"
-	"src/Constexpr/ConstexprMatrix.cpp"
-	"src/Constexpr/ConstexprStrUtils.cpp"
+	src/Constexpr/ConstexprAlgorithms.cpp
+	src/Constexpr/ConstexprCollections.cpp
+	src/Constexpr/ConstexprGeometry.cpp
+	src/Constexpr/ConstexprMath.cpp
+	src/Constexpr/ConstexprMatrix.cpp
+	src/Constexpr/ConstexprStrUtils.cpp
 
-	"src/Instrumentation/ISink.cpp"
-	"src/Instrumentation/Logging.cpp"
-	"src/Instrumentation/LogWriter/StdOutLogWriter.cpp"
+	src/Instrumentation/ISink.cpp
+	src/Instrumentation/Logging.cpp
+	src/Instrumentation/LogWriter/StdOutLogWriter.cpp
 
-	"src/Platform/ExecuteCommand_win.cpp"
+	src/Platform/ExecuteCommand_win.cpp
 
-	"src/Utilities/ExpressionEvaluator.cpp"
-	"src/Utilities/FileUtils.cpp"
-	"src/Utilities/PathUtils.cpp"
-	"src/Utilities/ProgressBar.cpp"
-	"src/Utilities/StringUtils.cpp"
-	"src/Utilities/TimeUtils.cpp"
+	src/Utilities/ExpressionEvaluator.cpp
+	src/Utilities/FileUtils.cpp
+	src/Utilities/PathUtils.cpp
+	src/Utilities/ProgressBar.cpp
+	src/Utilities/StringUtils.cpp
+	src/Utilities/TimeUtils.cpp
 
-	"src/BigInt.cpp"
+	src/BigInt.cpp
 )

@@ -1,5 +1,5 @@
 #include "TestCommon.h"
-#include "Core/Threading/Runner2.h"
+#include "Core/Threading/Tasks.h"
 
 #include <thread>
 #include <chrono>
@@ -71,8 +71,8 @@ TEST(WhenAll, WhenAll_WithEmptyResultTask_ReturnsValidFuture) {
 TEST(WhenAll, WhenAll_WithResult_ReturnsVectorOfResults) {
 	std::vector<std::function<size_t()>> tasks{};
 	std::vector<size_t> expectedResults{};
-	for(size_t i = 0ull; i < 5; i++) {
-		tasks.emplace_back(MakeResultTask(i, i));
+	for(size_t i = 0ull; i < 50; i++) {
+		tasks.emplace_back(MakeResultTask(i, i % 10));
 		expectedResults.emplace_back(i);
 	}
 	auto future = WhenAll(tasks);
