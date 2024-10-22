@@ -30,9 +30,9 @@ public:
     constexpr BigInt(T number = 0);
 
     constexpr BigInt(const BigInt& other);
-    constexpr BigInt(BigInt&& other);
+    constexpr BigInt(BigInt&& other) noexcept;
     constexpr BigInt& operator=(const BigInt& other);
-    constexpr BigInt& operator=(const BigInt&& other);
+    constexpr BigInt& operator=(const BigInt&& other) noexcept;
 
     ~BigInt() = default;
 

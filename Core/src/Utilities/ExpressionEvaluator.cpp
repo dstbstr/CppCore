@@ -13,11 +13,11 @@ namespace {
         return FalseVal;
     }
 
-    bool ContainsInnerExpression(const std::string& line) {
+    constexpr bool ContainsInnerExpression(const std::string& line) {
         return line.find('(') != line.npos;
     }
 
-    size_t ExtractInnerExpression(const std::string& line, std::string& outString) {
+    constexpr size_t ExtractInnerExpression(const std::string& line, std::string& outString) {
         auto closeParen = line.find_first_of(')');
         std::string substr = line.substr(0, closeParen);
         auto openParen = substr.find_last_of('(');

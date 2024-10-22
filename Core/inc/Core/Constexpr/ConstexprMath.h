@@ -5,6 +5,7 @@
 #include <string_view>
 #include <algorithm> //std::copy_if
 #include <iterator> //std::back_inserter
+#include <ranges>
 
 namespace Constexpr {
     template<typename T>
@@ -165,15 +166,10 @@ namespace Constexpr {
     constexpr std::vector<T> GetPrimes(T max) {
         static_assert(!std::is_floating_point_v<T>);
         if (max <= KnownPrimes<T>.back()) {
-            std::vector<T> result;
-            std::copy_if(KnownPrimes<T>.begin(), KnownPrimes<T>.end(), std::back_inserter(result), [max](auto p) { return p <= max; });
-            return result;
+			return std::views::take_while(KnownPrimes<T>, [max](auto p) { return p <= max; })
+				| std::ranges::to<std::vector<T>>();
         }
         std::vector<bool> candidates(max + 1, true);
-        //candidates.reserve(max + 1);
-        //for (T i = 0; i < max + 1; i++) {
-        //    candidates.push_back(true);
-        //}
 
         std::vector<T> result{};
         auto maxFactor = static_cast<T>(Sqrt(static_cast<double>(max) + 1));
@@ -198,9 +194,8 @@ namespace Constexpr {
     constexpr std::vector<T> GetPrimes() {
         static_assert(!std::is_floating_point_v<T>);
         if constexpr (Max <= KnownPrimes<T>.back()) {
-            std::vector<T> result;
-            std::copy_if(KnownPrimes<T>.begin(), KnownPrimes<T>.end(), std::back_inserter(result), [](auto p) { return p <= Max; });
-            return result;
+            return std::views::take_while(KnownPrimes<T>, [](auto p) { return p <= Max; })
+                | std::ranges::to<std::vector<T>>();
         }
         else {
             std::array<bool, Max + 1> candidates{};
@@ -228,33 +223,15 @@ namespace Constexpr {
 
     template<typename T>
     constexpr std::vector<T> GetUniquePrimeFactors(T value) {
-        auto primes = GetPrimes<T>(value);
-
-        std::vector<T> result{};
-
-        for (auto factor : primes) {
-            if (value % factor == 0) {
-                result.push_back(factor);
-            }
-        }
-
-        return result;
+		return std::views::filter(GetPrimes<T>(value), [value](auto p) { return value % p == 0; })
+			| std::ranges::to<std::vector<T>>();
     }
 
     template<size_t Value, typename T>
     constexpr std::vector<T> GetUniquePrimeFactors() {
         static_assert(Value > 1);
-        auto primes = GetPrimes<Value, T>();
-
-        std::vector<T> result{};
-
-        for (auto factor : primes) {
-            if (Value % factor == 0) {
-                result.push_back(factor);
-            }
-        }
-
-        return result;
+		return std::views::filter(GetPrimes<Value, T>(), [](auto p) { return Value % p == 0; })
+			| std::ranges::to<std::vector<T>>();
     }
 
     template<typename T>

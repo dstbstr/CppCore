@@ -1,5 +1,4 @@
-#ifndef __REQUIRE_H__
-#define __REQUIRE_H__
+#pragma once
 
 #include "Core/Utilities/StringUtils.h"
 
@@ -97,4 +96,3 @@ namespace Require {
     }
 
 } // namespace Require
-#endif // __REQUIRE_H__

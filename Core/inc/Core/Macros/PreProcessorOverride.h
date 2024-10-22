@@ -1,5 +1,4 @@
-#ifndef __PREPROCESSOROVERRIDE_H__
-#define __PREPROCESSOROVERRIDE_H__
+#pragma once
 
 #define EXPAND(...) __VA_ARGS__
 #define VA_NARGS_IMPL(_1, _2, _3, _4, _5, _6, _7, _8, N, ...) N
@@ -17,5 +16,3 @@
 // #define MY_MACRO(...) MACRO_OVERRIDE(_MY_MACRO_, __VA_ARGS__)
 
 // NOTE: This does not support a zero arg version
-
-#endif // __PREPROCESSOROVERRIDE_H__

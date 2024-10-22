@@ -1,5 +1,4 @@
-#ifndef __EXPRESSIONEVALUATOR_H__
-#define __EXPRESSIONEVALUATOR_H__
+#pragma once
 
 #include <functional>
 #include <string>
@@ -7,4 +6,3 @@
 namespace ExpressionEvaluator {
     bool Evaluate(const std::string& line, const std::function<bool(std::string)>& predicate);
 }
-#endif // __EXPRESSIONEVALUATOR_H__

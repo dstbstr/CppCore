@@ -61,7 +61,7 @@ constexpr BigInt::BigInt(const BigInt& other) {
     negative = other.negative;
 }
 
-constexpr BigInt::BigInt(BigInt&& other) {
+constexpr BigInt::BigInt(BigInt&& other) noexcept {
     digits = other.digits;
     negative = other.negative;
 }
@@ -71,7 +71,7 @@ constexpr BigInt& BigInt::operator=(const BigInt& other) {
     negative = other.negative;
     return *this;
 }
-constexpr BigInt& BigInt::operator=(const BigInt&& other) {
+constexpr BigInt& BigInt::operator=(const BigInt&& other) noexcept {
     digits = other.digits;
     negative = other.negative;
     return *this;
