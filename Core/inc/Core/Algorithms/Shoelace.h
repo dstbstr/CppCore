@@ -36,7 +36,7 @@ namespace Shoelace {
 	constexpr double GetInteriorArea(const std::vector<Coord>& points) {
 		auto Determinant = [](Coord a, Coord b) {return (a.X * b.Y) - (a.Y * b.X); };
 		s64 running = 0;
-		for (auto i = 0; i < points.size() - 1; i++) {
+		for (size_t i = 0u; i < points.size() - 1; i++) {
 			running += Determinant(points[i], points[i + 1]);
 		}
 		running += Determinant(points.back(), points[0]);

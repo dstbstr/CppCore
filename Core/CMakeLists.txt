@@ -35,4 +35,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Utilities/TimeUtils.cpp
 
 	src/BigInt.cpp
-)
+ "inc/Core/Constexpr/ConstexprRandom.h" "src/Constexpr/ConstexprRandom.cpp")

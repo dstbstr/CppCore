@@ -21,7 +21,7 @@ auto WhenAll(auto tasks, ProgressCallback progressCallback = nullptr) {
 	}
 
     return std::async(std::launch::async, [tasks, progressCallback]() {
-        size_t MaxConcurrency = std::max(1ull, static_cast<size_t>(std::thread::hardware_concurrency()));
+        u64 MaxConcurrency = std::max(1ull, static_cast<u64>(std::thread::hardware_concurrency()));
         std::vector<std::future<ReturnType>> futures;
         auto copy = tasks;
         size_t finishedTasks = 0;
@@ -29,8 +29,8 @@ auto WhenAll(auto tasks, ProgressCallback progressCallback = nullptr) {
         size_t currentTask = totalTasks;
         if constexpr (std::is_same_v<ReturnType, void>) {
             while (finishedTasks < totalTasks) {
-                auto taskCount = std::min(currentTask, MaxConcurrency - futures.size());
-                for (auto i = 0; i < taskCount; i++) {
+                auto taskCount = std::min(currentTask, static_cast<size_t>(MaxConcurrency - futures.size()));
+                for (size_t i = 0u; i < taskCount; i++) {
                     futures.emplace_back(std::async(std::launch::async, copy[--currentTask]));
                 }
                 for (int i = static_cast<int>(futures.size()) - 1; i >= 0; i--) {

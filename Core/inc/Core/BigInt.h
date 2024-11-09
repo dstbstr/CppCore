@@ -42,50 +42,63 @@ public:
     friend constexpr bool operator==(const BigInt& lhs, bool rhs);
     friend constexpr bool operator==(const BigInt& lhs, char rhs);
     friend constexpr bool operator==(const BigInt& lhs, int rhs);
-    friend constexpr bool operator==(const BigInt& lhs, size_t rhs);
+    friend constexpr bool operator==(const BigInt& lhs, long long rhs);
+    friend constexpr bool operator==(const BigInt& lhs, unsigned long long rhs);
     friend constexpr bool operator==(bool lhs, const BigInt& rhs);
     friend constexpr bool operator==(char lhs, const BigInt& rhs);
     friend constexpr bool operator==(int lhs, const BigInt& rhs);
-    friend constexpr bool operator==(size_t lhs, const BigInt& rhs);
+    friend constexpr bool operator==(long long lhs, const BigInt& rhs);
+    friend constexpr bool operator==(unsigned long long lhs, const BigInt& rhs);
 
     friend constexpr bool operator!=(const BigInt& lhs, const BigInt& rhs);
     friend constexpr bool operator!=(const BigInt& lhs, bool rhs);
     friend constexpr bool operator!=(const BigInt& lhs, char rhs);
     friend constexpr bool operator!=(const BigInt& lhs, int rhs);
-    friend constexpr bool operator!=(const BigInt& lhs, size_t rhs);
+    friend constexpr bool operator!=(const BigInt& lhs, long long rhs);
+    friend constexpr bool operator!=(const BigInt& lhs, unsigned long long rhs);
     friend constexpr bool operator!=(bool lhs, const BigInt& rhs);
     friend constexpr bool operator!=(char lhs, const BigInt& rhs);
     friend constexpr bool operator!=(int lhs, const BigInt& rhs);
-    friend constexpr bool operator!=(size_t lhs, const BigInt& rhs);
+    friend constexpr bool operator!=(long long lhs, const BigInt& rhs);
+    friend constexpr bool operator!=(unsigned long long lhs, const BigInt& rhs);
 
     friend constexpr bool operator<(const BigInt& lhs, const BigInt& rhs);
-    friend constexpr bool operator<(size_t lhs, const BigInt& rhs);
-    friend constexpr bool operator<(const BigInt& lhs, size_t rhs);
     friend constexpr bool operator<(long long lhs, const BigInt& rhs);
-    friend constexpr bool operator<(const BigInt& lhs, int rhs);
+    friend constexpr bool operator<(unsigned long long lhs, const BigInt& rhs);
+    friend constexpr bool operator<(const BigInt& lhs, long long rhs);
+    friend constexpr bool operator<(const BigInt& lhs, unsigned long long rhs);
     friend constexpr bool operator<(int lhs, const BigInt& rhs);
+    friend constexpr bool operator<(unsigned int lhs, const BigInt& rhs);
+    friend constexpr bool operator<(const BigInt& lhs, int rhs);
+    friend constexpr bool operator<(const BigInt& lhs, unsigned int rhs);
 
     friend constexpr bool operator<=(const BigInt& lhs, const BigInt& rhs);
-    friend constexpr bool operator<=(const BigInt& lhs, size_t rhs);
     friend constexpr bool operator<=(const BigInt& lhs, long long rhs);
+    friend constexpr bool operator<=(const BigInt& lhs, unsigned long long rhs);
     friend constexpr bool operator<=(const BigInt& lhs, int rhs);
+    friend constexpr bool operator<=(const BigInt& lhs, unsigned int rhs);
     friend constexpr bool operator<=(int lhs, const BigInt& rhs);
+    friend constexpr bool operator<=(unsigned int lhs, const BigInt& rhs);
 
     friend constexpr bool operator>(const BigInt& lhs, const BigInt& rhs);
     friend constexpr bool operator>(const BigInt& lhs, int rhs);
+    friend constexpr bool operator>(const BigInt& lhs, unsigned int rhs);
     friend constexpr bool operator>(int lhs, const BigInt& rhs);
-    friend constexpr bool operator>(size_t lhs, const BigInt& rhs);
-    friend constexpr bool operator>(const BigInt& lhs, size_t rhs);
+    friend constexpr bool operator>(unsigned int lhs, const BigInt& rhs);
     friend constexpr bool operator>(long long lhs, const BigInt& rhs);
+    friend constexpr bool operator>(unsigned long long lhs, const BigInt& rhs);
     friend constexpr bool operator>(const BigInt& lhs, long long rhs);
+    friend constexpr bool operator>(const BigInt& lhs, unsigned long long rhs);
 
     friend constexpr bool operator>=(const BigInt& lhs, const BigInt& rhs);
-    friend constexpr bool operator>=(size_t lhs, const BigInt& rhs);
-    friend constexpr bool operator>=(const BigInt& lhs, size_t rhs);
     friend constexpr bool operator>=(long long lhs, const BigInt& rhs);
+    friend constexpr bool operator>=(unsigned long long lhs, const BigInt& rhs);
     friend constexpr bool operator>=(const BigInt& lhs, long long rhs);
+    friend constexpr bool operator>=(const BigInt& lhs, unsigned long long rhs);
     friend constexpr bool operator>=(const BigInt& lhs, int rhs);
+    friend constexpr bool operator>=(const BigInt& lhs, unsigned int rhs);
     friend constexpr bool operator>=(int lhs, const BigInt& rhs);
+    friend constexpr bool operator>=(unsigned int lhs, const BigInt& rhs);
 
     // Unary Operations
 
@@ -101,81 +114,96 @@ public:
     friend constexpr BigInt operator+(BigInt lhs, bool rhs);
     friend constexpr BigInt operator+(BigInt lhs, char rhs);
     friend constexpr BigInt operator+(BigInt lhs, int rhs);
-    friend constexpr BigInt operator+(BigInt lhs, size_t rhs);
+    friend constexpr BigInt operator+(BigInt lhs, long long rhs);
+    friend constexpr BigInt operator+(BigInt lhs, unsigned long long rhs);
     friend constexpr BigInt operator+(bool lhs, BigInt rhs);
     friend constexpr BigInt operator+(char lhs, BigInt rhs);
     friend constexpr BigInt operator+(int lhs, BigInt rhs);
-    friend constexpr BigInt operator+(size_t lhs, BigInt rhs);
+    friend constexpr BigInt operator+(long long lhs, BigInt rhs);
+    friend constexpr BigInt operator+(unsigned long long lhs, BigInt rhs);
 
     friend constexpr BigInt& operator+=(BigInt& lhs, const BigInt& rhs);
     friend constexpr BigInt& operator+=(BigInt& lhs, bool rhs);
     friend constexpr BigInt& operator+=(BigInt& lhs, int rhs);
     friend constexpr BigInt& operator+=(BigInt& lhs, char rhs);
-    friend constexpr BigInt& operator+=(BigInt& lhs, size_t rhs);
+    friend constexpr BigInt& operator+=(BigInt& lhs, long long rhs);
+    friend constexpr BigInt& operator+=(BigInt& lhs, unsigned long long rhs);
 
     friend constexpr BigInt operator-(BigInt lhs, const BigInt& rhs);
     friend constexpr BigInt operator-(BigInt lhs, bool rhs);
     friend constexpr BigInt operator-(BigInt lhs, char rhs);
     friend constexpr BigInt operator-(BigInt lhs, int rhs);
-    friend constexpr BigInt operator-(BigInt lhs, size_t rhs);
+    friend constexpr BigInt operator-(BigInt lhs, long long rhs);
+    friend constexpr BigInt operator-(BigInt lhs, unsigned long long rhs);
     friend constexpr BigInt operator-(bool lhs, BigInt rhs);
     friend constexpr BigInt operator-(char lhs, BigInt rhs);
     friend constexpr BigInt operator-(int lhs, BigInt rhs);
-    friend constexpr BigInt operator-(size_t lhs, BigInt rhs);
+    friend constexpr BigInt operator-(long long lhs, BigInt rhs);
+    friend constexpr BigInt operator-(unsigned long long lhs, BigInt rhs);
 
     friend constexpr BigInt& operator-=(BigInt& lhs, const BigInt& rhs);
     friend constexpr BigInt& operator-=(BigInt& lhs, bool rhs);
     friend constexpr BigInt& operator-=(BigInt& lhs, char rhs);
     friend constexpr BigInt& operator-=(BigInt& lhs, int rhs);
-    friend constexpr BigInt& operator-=(BigInt& lhs, size_t rhs);
+    friend constexpr BigInt& operator-=(BigInt& lhs, long long rhs);
+    friend constexpr BigInt& operator-=(BigInt& lhs, unsigned long long rhs);
 
     friend constexpr BigInt operator*(BigInt lhs, const BigInt& rhs);
     friend constexpr BigInt operator*(BigInt lhs, bool rhs);
     friend constexpr BigInt operator*(BigInt lhs, char rhs);
     friend constexpr BigInt operator*(BigInt lhs, int rhs);
-    friend constexpr BigInt operator*(BigInt lhs, size_t rhs);
+    friend constexpr BigInt operator*(BigInt lhs, long long rhs);
+    friend constexpr BigInt operator*(BigInt lhs, unsigned long long rhs);
     friend constexpr BigInt operator*(bool lhs, BigInt rhs);
     friend constexpr BigInt operator*(char lhs, BigInt rhs);
     friend constexpr BigInt operator*(int lhs, BigInt rhs);
-    friend constexpr BigInt operator*(size_t lhs, BigInt rhs);
+    friend constexpr BigInt operator*(long long lhs, BigInt rhs);
+    friend constexpr BigInt operator*(unsigned long long lhs, BigInt rhs);
 
     friend constexpr BigInt& operator*=(BigInt& lhs, const BigInt& rhs);
     friend constexpr BigInt& operator*=(BigInt& lhs, int rhs);
     friend constexpr BigInt& operator*=(BigInt& lhs, char rhs);
     friend constexpr BigInt& operator*=(BigInt& lhs, bool rhs);
-    friend constexpr BigInt& operator*=(BigInt& lhs, size_t rhs);
+    friend constexpr BigInt& operator*=(BigInt& lhs, long long rhs);
+    friend constexpr BigInt& operator*=(BigInt& lhs, unsigned long long rhs);
 
     friend constexpr BigInt& operator/=(BigInt& lhs, const BigInt& rhs);
     friend constexpr BigInt& operator/=(BigInt& lhs, bool rhs);
     friend constexpr BigInt& operator/=(BigInt& lhs, char rhs);
     friend constexpr BigInt& operator/=(BigInt& lhs, int rhs);
-    friend constexpr BigInt& operator/=(BigInt& lhs, size_t rhs);
+    friend constexpr BigInt& operator/=(BigInt& lhs, long long rhs);
+    friend constexpr BigInt& operator/=(BigInt& lhs, unsigned long long rhs);
 
     friend constexpr BigInt operator/(BigInt lhs, const BigInt& rhs);
     friend constexpr BigInt operator/(BigInt lhs, bool rhs) = delete; //let's not divide by 0
     friend constexpr BigInt operator/(BigInt lhs, char rhs);
     friend constexpr BigInt operator/(BigInt lhs, int rhs);
-    friend constexpr BigInt operator/(BigInt lhs, size_t rhs);
+    friend constexpr BigInt operator/(BigInt lhs, long long rhs);
+    friend constexpr BigInt operator/(BigInt lhs, unsigned long long rhs);
     friend constexpr BigInt operator/(bool lhs, const BigInt& rhs) = delete; // BigInt doesn't support decimals
     friend constexpr BigInt operator/(char lhs, const BigInt& rhs);
     friend constexpr BigInt operator/(int lhs, const BigInt& rhs);
-    friend constexpr BigInt operator/(size_t lhs, const BigInt& rhs);
+    friend constexpr BigInt operator/(long long lhs, const BigInt& rhs);
+    friend constexpr BigInt operator/(unsigned long long lhs, const BigInt& rhs);
 
     friend constexpr BigInt& operator%=(BigInt& lhs, const BigInt& rhs);
     friend constexpr BigInt& operator%=(BigInt& lhs, bool rhs) = delete; //avoiding divide by 0
     friend constexpr BigInt& operator%=(BigInt& lhs, char rhs);
     friend constexpr BigInt& operator%=(BigInt& lhs, int rhs);
-    friend constexpr BigInt& operator%=(BigInt& lhs, size_t rhs);
+    friend constexpr BigInt& operator%=(BigInt& lhs, long long rhs);
+    friend constexpr BigInt& operator%=(BigInt& lhs, unsigned long long rhs);
 
     friend constexpr BigInt operator%(BigInt lhs, const BigInt& rhs);
     friend constexpr BigInt operator%(BigInt lhs, bool rhs) = delete; //avoiding divide by 0
     friend constexpr BigInt operator%(BigInt lhs, char rhs);
     friend constexpr BigInt operator%(BigInt lhs, int rhs);
-    friend constexpr BigInt operator%(BigInt lhs, size_t rhs);
+    friend constexpr BigInt operator%(BigInt lhs, long long rhs);
+    friend constexpr BigInt operator%(BigInt lhs, unsigned long long rhs);
     friend constexpr BigInt operator%(bool lhs, const BigInt& rhs);
     friend constexpr BigInt operator%(char lhs, const BigInt& rhs);
     friend constexpr BigInt operator%(int lhs, const BigInt& rhs);
-    friend constexpr BigInt operator%(size_t lhs, const BigInt& rhs);
+    friend constexpr BigInt operator%(long long lhs, const BigInt& rhs);
+    friend constexpr BigInt operator%(unsigned long long lhs, const BigInt& rhs);
 
     friend constexpr BigInt& operator>>=(BigInt& lhs, const BigInt& rhs);
     friend constexpr BigInt operator>>(BigInt lhs, const BigInt& rhs);

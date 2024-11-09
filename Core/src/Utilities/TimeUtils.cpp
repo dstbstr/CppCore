@@ -6,16 +6,22 @@
 #include <functional>
 #include <iomanip>
 #include <sstream>
+#include <format>
+#include <filesystem>
 
 using c = std::chrono::system_clock;
 using tp = c::time_point;
 using ft = std::filesystem::file_time_type;
 
 namespace {
+    using namespace std::chrono;
+    using namespace std::chrono_literals;
+
     constexpr char DefaultDateFormat[]{"%Y/%m/%d"};
     constexpr char DefaultDateTimeFormat[]{"%Y/%m/%d %H:%M:%S"};
     constexpr char DefaultTimeFormat[]{"%H:%M:%S"};
 
+    /*
     constexpr f64 MicroToMilli = 1.0 / 1000.0;
     constexpr f64 MicroToSecond = MicroToMilli / 1000.0;
     constexpr f64 MicroToMinute = MicroToSecond / 60;
@@ -23,13 +29,15 @@ namespace {
     constexpr f64 MicroToDay = MicroToHour / 24;
     constexpr f64 MicroToWeek = MicroToDay / 7;
     constexpr f64 MicroToYear = MicroToDay / 365;
-    constexpr u64 MinMillis = 1000;
+    constexpr auto MinMillis = std::chrono::duration_cast<std::chrono::milliseconds>(1s);
+    //constexpr u64 MinMillis = 1000;
     constexpr u64 MinSeconds = MinMillis * 1000;
     constexpr u64 MinMinutes = MinSeconds * 60;
     constexpr u64 MinHours = MinMinutes * 60;
     constexpr u64 MinDays = MinHours * 24;
     constexpr u64 MinWeeks = MinDays * 7;
     constexpr u64 MinYears = MinDays * 365;
+    */
 
     std::string TimePointToString(const tp& time, const char* format, std::function<errno_t(tm*, const time_t*)> convertFunc) {
         std::stringstream ss;
@@ -186,6 +194,15 @@ namespace TimeUtils {
 
         TimeUnit timeUnit = minUnit;
 
+        if(duration < 1ms) timeUnit = std::max(timeUnit, TimeUnit::MICRO);
+        else if(duration < 1s) timeUnit = std::max(timeUnit, TimeUnit::MILLI);
+        else if(duration < 1min) timeUnit = std::max(timeUnit, TimeUnit::SECOND);
+		else if (duration < 1h) timeUnit = std::max(timeUnit, TimeUnit::MINUTE);
+		else if (duration < 24h) timeUnit = std::max(timeUnit, TimeUnit::HOUR);
+		else if (duration < 24h * 7) timeUnit = std::max(timeUnit, TimeUnit::DAY);
+		else if (duration < 24h * 365) timeUnit = std::max(timeUnit, TimeUnit::WEEK);
+		else timeUnit = TimeUnit::YEAR;
+        /*
         if(microseconds < MinMillis) {
             timeUnit = std::max(timeUnit, TimeUnit::MICRO);
         } else if(microseconds < MinSeconds) {
@@ -203,7 +220,22 @@ namespace TimeUtils {
         } else {
             timeUnit = TimeUnit::YEAR;
         }
+        */
 
+        switch(timeUnit) {
+            using enum TimeUnit;
+        case MICRO: return DurationToStringImpl(negative, static_cast<f64>(duration.count()), "us");
+        case MILLI: return DurationToStringImpl(negative, duration / 1.0ms, "ms");
+		case SECOND: return DurationToStringImpl(negative, duration / 1.0s, "s");
+		case MINUTE: return DurationToStringImpl(negative, duration / 1.0min, "m");
+		case HOUR: return DurationToStringImpl(negative, duration / 1.0h, "h");
+		case DAY: return DurationToStringImpl(negative, duration / 24.0h, "days");
+		case WEEK: return DurationToStringImpl(negative, duration / 168.0h, "weeks");
+        case YEAR: return DurationToStringImpl(negative, duration / 24.0h / 365.0, "years");
+        default: return "Invalid Time Unit";
+        }
+        /*
+		DurationToStringImpl(negative, duration_cast<milliseconds>(duration).count() / 100.0, "milliseconds");
         switch(timeUnit) {
         case TimeUnit::MICRO: return DurationToStringImpl(negative, microseconds * 1.0, "microseconds");
         case TimeUnit::MILLI: return DurationToStringImpl(negative, microseconds * MicroToMilli, "milliseconds");
@@ -214,7 +246,8 @@ namespace TimeUtils {
         case TimeUnit::WEEK: return DurationToStringImpl(negative, microseconds * MicroToWeek, "weeks");
         case TimeUnit::YEAR: return DurationToStringImpl(negative, microseconds * MicroToYear, "years");
         default: return "Invalid time unit.";
-        };
+        */
+        //};
     }
 
     tp StringToTimePoint(const std::string& timeString, const std::string& format) {

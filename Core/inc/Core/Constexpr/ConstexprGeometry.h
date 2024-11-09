@@ -410,16 +410,16 @@ struct std::hash<Vec4<T>> {
     }
 };
 
-constexpr size_t MDistance(const RowCol& pos) {
-    return pos.Row + pos.Col;
+constexpr u64 MDistance(const RowCol& pos) {
+    return static_cast<u64>(pos.Row) + pos.Col;
 }
 
-constexpr size_t MDistance(const RowCol& lhs, const RowCol& rhs) {
-    return Constexpr::AbsDistance(lhs.Row, rhs.Row) + Constexpr::AbsDistance(lhs.Col, rhs.Col);
+constexpr u64 MDistance(const RowCol& lhs, const RowCol& rhs) {
+    return static_cast<u64>(Constexpr::AbsDistance(lhs.Row, rhs.Row)) + Constexpr::AbsDistance(lhs.Col, rhs.Col);
 }
 
 template<template<typename> typename Container, typename T>
-constexpr size_t MDistance(Container<T> p) {
+constexpr u64 MDistance(Container<T> p) {
     using Raw = std::remove_cvref_t<Container<T>>;
     T sum = Constexpr::Abs(p.X) + Constexpr::Abs(p.Y);
     if constexpr (!std::is_same_v<Vec2<T>, Raw>) {
@@ -429,11 +429,11 @@ constexpr size_t MDistance(Container<T> p) {
         }
     }
 
-    return static_cast<size_t>(sum);
+    return static_cast<u64>(sum);
 }
 
 template<template<typename> typename Container, typename T>
-constexpr size_t MDistance(Container<T> a, Container<T> b) {
+constexpr u64 MDistance(Container<T> a, Container<T> b) {
     using Raw = std::remove_cvref_t<Container<T>>;
     T sum = Constexpr::AbsDistance(a.X, b.X) + Constexpr::AbsDistance(a.Y, b.Y);
     if constexpr (!std::is_same_v<Vec2<T>, Raw>) {
@@ -443,7 +443,7 @@ constexpr size_t MDistance(Container<T> a, Container<T> b) {
         }
     }
 
-    return static_cast<size_t>(sum);
+    return static_cast<u64>(sum);
 }
 
 namespace _Impl {
@@ -497,7 +497,7 @@ constexpr std::vector<Container<T>> GetAllNeighbors(const Container<T>& pos) {
     std::vector<Container<T>> result{};
     for (auto d : _Impl::GetDeltas<Container, T>()) {
         auto size = result.size();
-        for (auto i = 0; i < size; i++) {
+        for (size_t i = 0u; i < size; i++) {
             result.push_back(result[i] + d);
             result.push_back(result[i] - d);
         }
@@ -519,7 +519,7 @@ constexpr std::vector<Container<T>> GetAllNeighbors(Container<T> pos, Container<
 
     for (auto d : _Impl::GetDeltas<Container, T>()) {
         auto size = result.size();
-        for (auto i = 0; i < size; i++) {
+        for (size_t i = 0u; i < size; i++) {
             auto n = result[i];
             temp = n + d;
             AddValid();

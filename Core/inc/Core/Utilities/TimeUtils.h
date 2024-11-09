@@ -6,7 +6,7 @@
 
 namespace TimeUtils {
 
-    enum TimeUnit { MICRO, MILLI, SECOND, MINUTE, HOUR, DAY, WEEK, YEAR };
+    enum struct TimeUnit { MICRO, MILLI, SECOND, MINUTE, HOUR, DAY, WEEK, YEAR };
 
     //%Y/%m/%d %H:%M:%S
     std::string DateTimeLocalToString(const std::chrono::system_clock::time_point& dateTime, const std::string& format);

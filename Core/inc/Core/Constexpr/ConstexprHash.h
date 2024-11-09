@@ -68,7 +68,7 @@ namespace Constexpr {
 
     template<typename T>
     struct Hasher {
-        constexpr size_t operator()(const T& t) const {
+        constexpr size_t operator()(const T&) const {
             static_assert(std::_Always_false<T>, "Hash not implemented for type");
             return 0;
         }
@@ -102,15 +102,15 @@ namespace Constexpr {
     };
 
     template<>
-    struct Hasher<size_t> {
-        constexpr size_t operator()(const size_t& t) const {
-            return t;
+    struct Hasher<long long> {
+        constexpr size_t operator()(const long long& t) const {
+            return static_cast<size_t>(t);
         }
     };
 
     template<>
-    struct Hasher<long long> {
-        constexpr size_t operator()(const long long& t) const {
+    struct Hasher<unsigned long long> {
+        constexpr size_t operator()(const unsigned long long& t) const {
             return static_cast<size_t>(t);
         }
     };

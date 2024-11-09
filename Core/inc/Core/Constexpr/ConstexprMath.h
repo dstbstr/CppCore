@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Platform/Types.h"
+
 #include <vector>
 #include <array>
 #include <string_view>
@@ -145,7 +147,7 @@ namespace Constexpr {
         return remainder >= 0 ? remainder : remainder + Abs(modulus);
     }
 
-    template<typename T = size_t>
+    template<typename T = u64>
     constexpr T FromBase26(std::string_view str) {
         T pow = 1;
         T result = 0;
@@ -355,12 +357,12 @@ namespace Constexpr {
             }
             T result = 1;
             std::vector<size_t> indexes;
-            for (auto i = 0; i < factors.size(); i++) {
+            for (size_t i = 0u; i < factors.size(); i++) {
                 indexes.push_back(0);
             }
 
             auto oneListDone = [&]() {
-                for (auto i = 0; i < indexes.size(); i++) {
+                for (size_t i = 0u; i < indexes.size(); i++) {
                     if (indexes[i] == factors[i].size()) {
                         return true;
                     }
@@ -371,21 +373,21 @@ namespace Constexpr {
             std::vector<T> values;
             while (!oneListDone()) {
                 values.clear();
-                for (auto i = 0; i < indexes.size(); i++) {
+                for (size_t i = 0u; i < indexes.size(); i++) {
                     values.push_back(factors[i][indexes[i]]);
                 }
 
                 auto min = *std::min_element(values.begin(), values.end());
 
                 result *= min;
-                for (auto i = 0; i < indexes.size(); i++) {
+                for (size_t i = 0u; i < indexes.size(); i++) {
                     if (values[i] == min) {
                         indexes[i]++;
                     }
                 }
             }
 
-            for (auto i = 0; i < indexes.size(); i++) {
+            for (size_t i = 0u; i < indexes.size(); i++) {
                 for (auto index = indexes[i]; index < factors[i].size(); index++) {
                     result *= factors[i][indexes[i]];
                 }
