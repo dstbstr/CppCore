@@ -17,27 +17,9 @@ namespace {
     using namespace std::chrono;
     using namespace std::chrono_literals;
 
-    constexpr char DefaultDateFormat[]{"%Y/%m/%d"};
-    constexpr char DefaultDateTimeFormat[]{"%Y/%m/%d %H:%M:%S"};
+    constexpr char DefaultDateFormat[]{"%Y-%m-%d"};
+    constexpr char DefaultDateTimeFormat[]{"%Y-%m-%d %H:%M:%S"};
     constexpr char DefaultTimeFormat[]{"%H:%M:%S"};
-
-    /*
-    constexpr f64 MicroToMilli = 1.0 / 1000.0;
-    constexpr f64 MicroToSecond = MicroToMilli / 1000.0;
-    constexpr f64 MicroToMinute = MicroToSecond / 60;
-    constexpr f64 MicroToHour = MicroToMinute / 60;
-    constexpr f64 MicroToDay = MicroToHour / 24;
-    constexpr f64 MicroToWeek = MicroToDay / 7;
-    constexpr f64 MicroToYear = MicroToDay / 365;
-    constexpr auto MinMillis = std::chrono::duration_cast<std::chrono::milliseconds>(1s);
-    //constexpr u64 MinMillis = 1000;
-    constexpr u64 MinSeconds = MinMillis * 1000;
-    constexpr u64 MinMinutes = MinSeconds * 60;
-    constexpr u64 MinHours = MinMinutes * 60;
-    constexpr u64 MinDays = MinHours * 24;
-    constexpr u64 MinWeeks = MinDays * 7;
-    constexpr u64 MinYears = MinDays * 365;
-    */
 
     std::string TimePointToString(const tp& time, const char* format, std::function<errno_t(tm*, const time_t*)> convertFunc) {
         std::stringstream ss;
@@ -73,118 +55,64 @@ namespace {
 } // namespace
 
 namespace TimeUtils {
-    std::string DateTimeLocalToString(const tp& dateTime, const std::string& format) {
-        return TimePointLocalToString(dateTime, format.c_str());
+    std::string DateTimeLocalToString(const tp& dateTime, const char* format) {
+		return TimePointLocalToString(dateTime, format ? format : DefaultDateTimeFormat);
     }
-    std::string DateTimeLocalToString(const tp& dateTime) {
-        return TimePointLocalToString(dateTime, DefaultDateTimeFormat);
-    }
-    std::string DateTimeLocalToString(const ft& dateTime, const std::string& format) {
-        return TimePointLocalToString(dateTime, format.c_str());
-    }
-    std::string DateTimeLocalToString(const ft& dateTime) {
-        return TimePointLocalToString(dateTime, DefaultDateTimeFormat);
-    }
-    std::string DateTimeUtcToString(const tp& dateTime, const std::string& format) {
-        return TimePointUtcToString(dateTime, format.c_str());
-    }
-    std::string DateTimeUtcToString(const tp& dateTime) {
-        return TimePointUtcToString(dateTime, DefaultDateTimeFormat);
-    }
-    std::string DateTimeUtcToString(const ft& dateTime, const std::string& format) {
-        return TimePointUtcToString(dateTime, format.c_str());
-    }
-    std::string DateTimeUtcToString(const ft& dateTime) {
-        return TimePointUtcToString(dateTime, DefaultDateTimeFormat);
+	std::string DateTimeLocalToString(const ft& dateTime, const char* format) {
+		return TimePointLocalToString(dateTime, format ? format : DefaultDateTimeFormat);
+	}
+	std::string DateTimeUtcToString(const tp& dateTime, const char* format) {
+		return TimePointUtcToString(dateTime, format ? format : DefaultDateTimeFormat);
+	}
+	std::string DateTimeUtcToString(const ft& dateTime, const char* format) {
+		return TimePointUtcToString(dateTime, format ? format : DefaultDateTimeFormat);
     }
 
-    std::string TodayNowLocalToString(const std::string& format) {
-        return TimePointLocalToString(c::now(), format.c_str());
-    }
-    std::string TodayNowLocalToString() {
-        return TimePointLocalToString(c::now(), DefaultDateTimeFormat);
-    }
-    std::string TodayNowUtcToString(const std::string& format) {
-        return TimePointUtcToString(c::now(), format.c_str());
-    }
-    std::string TodayNowUtcToString() {
-        return TimePointUtcToString(c::now(), DefaultDateTimeFormat);
+	std::string TodayNowLocalToString(const char* format) {
+		return TimePointLocalToString(c::now(), format ? format : DefaultDateTimeFormat);
+	}
+	std::string TodayNowUtcToString(const char* format) {
+		return TimePointUtcToString(c::now(), format ? format : DefaultDateTimeFormat);
     }
 
-    std::string DateLocalToString(const tp& date, const std::string& format) {
-        return TimePointLocalToString(date, format.c_str());
+	std::string DateLocalToString(const tp& date, const char* format) {
+		return TimePointLocalToString(date, format ? format : DefaultDateFormat);
+	}
+	std::string DateLocalToString(const ft& date, const char* format) {
+		return TimePointLocalToString(date, format ? format : DefaultDateFormat);
     }
-    std::string DateLocalToString(const tp& date) {
-        return TimePointLocalToString(date, DefaultDateFormat);
+	std::string DateUtcToString(const tp& date, const char* format) {
+		return TimePointUtcToString(date, format ? format : DefaultDateFormat);
     }
-    std::string DateLocalToString(const ft& date, const std::string& format) {
-        return TimePointLocalToString(date, format.c_str());
-    }
-    std::string DateLocalToString(const ft& date) {
-        return TimePointLocalToString(date, DefaultDateFormat);
-    }
-    std::string DateUtcToString(const tp& date, const std::string& format) {
-        return TimePointUtcToString(date, format.c_str());
-    }
-    std::string DateUtcToString(const tp& date) {
-        return TimePointUtcToString(date, DefaultDateFormat);
-    }
-    std::string DateUtcToString(const ft& date, const std::string& format) {
-        return TimePointUtcToString(date, format.c_str());
-    }
-    std::string DateUtcToString(const ft& date) {
-        return TimePointUtcToString(date, DefaultDateFormat);
+	std::string DateUtcToString(const ft& date, const char* format) {
+		return TimePointUtcToString(date, format ? format : DefaultDateFormat);
+	}
+
+	std::string TodayLocalToString(const char* format) {
+		return TimePointLocalToString(c::now(), format ? format : DefaultDateFormat);
+	}
+	std::string TodayUtcToString(const char* format) {
+		return TimePointUtcToString(c::now(), format ? format : DefaultDateFormat);
     }
 
-    std::string TodayLocalToString(const std::string& format) {
-        return TimePointLocalToString(c::now(), format.c_str());
+	std::string TimeLocalToString(const tp& time, const char* format) {
+		return TimePointLocalToString(time, format ? format : DefaultTimeFormat);
+	}
+	std::string TimeLocalToString(const ft& time, const char* format) {
+		return TimePointLocalToString(time, format ? format : DefaultTimeFormat);
     }
-    std::string TodayLocalToString() {
-        return TimePointLocalToString(c::now(), DefaultDateFormat);
+	std::string TimeUtcToString(const tp& time, const char* format) {
+		return TimePointUtcToString(time, format ? format : DefaultTimeFormat);
     }
-    std::string TodayUtcToString(const std::string& format) {
-        return TimePointUtcToString(c::now(), format.c_str());
-    }
-    std::string TodayUtcToString() {
-        return TimePointUtcToString(c::now(), DefaultDateFormat);
-    }
-
-    std::string TimeLocalToString(const tp& time, const std::string& format) {
-        return TimePointLocalToString(time, format.c_str());
-    }
-    std::string TimeLocalToString(const tp& time) {
-        return TimePointLocalToString(time, DefaultTimeFormat);
-    }
-    std::string TimeLocalToString(const ft& time, const std::string& format) {
-        return TimePointLocalToString(time, format.c_str());
-    }
-    std::string TimeLocalToString(const ft& time) {
-        return TimePointLocalToString(time, DefaultTimeFormat);
-    }
-    std::string TimeUtcToString(const tp& time, const std::string& format) {
-        return TimePointUtcToString(time, format.c_str());
-    }
-    std::string TimeUtcToString(const tp& time) {
-        return TimePointUtcToString(time, DefaultTimeFormat);
-    }
-    std::string TimeUtcToString(const ft& time, const std::string& format) {
-        return TimePointUtcToString(time, format.c_str());
-    }
-    std::string TimeUtcToString(const ft& time) {
-        return TimePointUtcToString(time, DefaultTimeFormat);
+	std::string TimeUtcToString(const ft& time, const char* format) {
+		return TimePointUtcToString(time, format ? format : DefaultTimeFormat);
     }
 
-    std::string NowLocalToString(const std::string& format) {
-        return TimePointLocalToString(c::now(), format.c_str());
-    }
-    std::string NowLocalToString() {
-        return TimeLocalToString(c::now());
-    }
-    std::string NowUtcToString(const std::string& format) {
-        return TimePointUtcToString(c::now(), format.c_str());
-    }
-    std::string NowUtcToString() {
-        return TimeUtcToString(c::now());
+	std::string NowLocalToString(const char* format) {
+		return TimePointLocalToString(c::now(), format);
+	}
+	std::string NowUtcToString(const char* format) {
+		return TimePointUtcToString(c::now(), format);
     }
 
     std::string DurationToString(const std::chrono::microseconds& duration, TimeUnit minUnit) {
