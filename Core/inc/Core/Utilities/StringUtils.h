@@ -24,11 +24,9 @@ inline std::string ToString(T input) {
     return std::string(buf.get());
 }
 
-template<>
 inline std::string ToString(const std::string& input) {
     return input;
 }
-template<>
 inline std::string ToString(const std::string_view& input) {
     return std::string(input);
 }

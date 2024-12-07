@@ -7,9 +7,6 @@
 #include "Core/Constexpr/ConstexprStrUtils.h"
 #include "Core/Constexpr/ConstexprHash.h"
 
-template<typename T>
-std::string ToString(T input);
-
 struct RowCol {
     size_t Row;
     size_t Col;
@@ -49,11 +46,6 @@ struct std::hash<RowCol> {
         return rc.Row ^ rc.Col;
     }
 };
-
-template<>
-inline std::string ToString(RowCol rc) {
-    return "{" + ToString(rc.Row) + "," + ToString(rc.Col) + "}";
-}
 
 namespace Constexpr {
     template<>
@@ -610,6 +602,11 @@ namespace _Impl {
     }
 }
 
+template<typename Container>
+constexpr auto GetLimits(const std::vector<std::string>& lines) {
+    return Container{ static_cast<u32>(lines.size() - 1), static_cast<u32>(lines[0].size() - 1) };
+}
+
 template<template<typename> typename Container, typename T>
 constexpr void GetLimits(auto start, auto end, Container<T>& outMin, Container<T>& outMax) {
     outMin = _Impl::InitialMin<Container, T>;
@@ -670,6 +667,40 @@ constexpr void GetLimitsFromMap(const auto& map, RowCol& min, RowCol& max) {
         min.Col = std::min(min.Col, key.Col);
         max.Row = std::max(max.Row, key.Row);
         max.Col = std::max(max.Col, key.Col);
+    }
+}
+
+namespace Constexpr {
+    template<typename T>
+	constexpr void ForEach(Vec2<T> min, Vec2<T> max, auto func) {
+		for (T x = min.X; x <= max.X; x++) {
+			for (T y = min.Y; y <= max.Y; y++) {
+				func(Vec2<T>{ x, y });
+			}
+		}
+	}
+
+    template<typename T>
+	constexpr void ForEach(Vec3<T> min, Vec3<T> max, auto func) {
+		for (T x = min.X; x <= max.X; x++) {
+			for (T y = min.Y; y <= max.Y; y++) {
+				for (T z = min.Z; z <= max.Z; z++) {
+					func(Vec3<T>{ x, y, z });
+				}
+			}
+		}
+	}
+	template<typename T>
+	constexpr void ForEach(Vec4<T> min, Vec4<T> max, auto func) {
+        for (T x = min.X; x <= max.X; x++) {
+            for (T y = min.Y; y <= max.Y; y++) {
+                for (T z = min.Z; z <= max.Z; z++) {
+					for (T w = min.W; w <= max.W; w++) {
+						func(Vec4<T>{ x, y, z, w });
+					}
+                }
+            }
+        }
     }
 }
 
