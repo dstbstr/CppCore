@@ -8,8 +8,8 @@
 #include "Core/Constexpr/ConstexprHash.h"
 
 struct RowCol {
-    size_t Row;
-    size_t Col;
+    size_t Row{0};
+    size_t Col{0};
     constexpr bool operator==(const RowCol& rc) const {
         return Row == rc.Row && Col == rc.Col;
     }
@@ -673,8 +673,8 @@ constexpr void GetLimitsFromMap(const auto& map, RowCol& min, RowCol& max) {
 namespace Constexpr {
     template<typename T>
 	constexpr void ForEach(Vec2<T> min, Vec2<T> max, auto func) {
-		for (T x = min.X; x <= max.X; x++) {
-			for (T y = min.Y; y <= max.Y; y++) {
+		for (T y = min.Y; y <= max.Y; y++) {
+			for (T x = min.X; x <= max.X; x++) {
 				func(Vec2<T>{ x, y });
 			}
 		}
@@ -742,6 +742,9 @@ struct Rect {
             TopLeft.Y <= p.Y && p.Y <= BottomRight.Y;
     }
 };
+
+template<typename Collection>
+constexpr Collection Origin{};
 
 namespace Constexpr {
     enum struct Orientation { Linear, Clockwise, CounterClockwise };

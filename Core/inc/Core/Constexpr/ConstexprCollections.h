@@ -400,7 +400,8 @@ namespace Constexpr {
                 Sentinel = std::make_pair<Key, Value>("SentinelString", {});
             }
             else if constexpr (std::is_arithmetic_v<Key>) {
-                Sentinel = std::make_pair<Key, Value>(9919, {});
+                // TODO: Make constructor which takes a sentinal value
+                Sentinel = std::make_pair<Key, Value>(Key(9919), {});
             }
             else {
                 Sentinel = std::make_pair<Key, Value>({}, {}); //bleh
