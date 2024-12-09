@@ -13,6 +13,9 @@ struct RowCol {
     constexpr bool operator==(const RowCol& rc) const {
         return Row == rc.Row && Col == rc.Col;
     }
+    constexpr bool operator!=(const RowCol& rc) const {
+        return !(*this == rc);
+    }
     constexpr bool operator<(const RowCol& rc) const {
         return Row != rc.Row ? Row < rc.Row : Col < rc.Col;
     }
