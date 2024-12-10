@@ -674,6 +674,21 @@ constexpr void GetLimitsFromMap(const auto& map, RowCol& min, RowCol& max) {
 }
 
 namespace Constexpr {
+    constexpr void ForEach(RowCol max, auto func) {
+        for (size_t row = 0; row <= max.Row; row++) {
+            for (size_t col = 0; col <= max.Col; col++) {
+                func(RowCol{ row, col });
+            }
+        }
+    }
+    constexpr void ForEach(RowCol min, RowCol max, auto func) {
+        for (size_t row = min.Row; row <= max.Row; row++) {
+            for (size_t col = min.Col; col <= max.Col; col++) {
+                func(RowCol{ row, col });
+            }
+        }
+    }
+
     template<typename T>
 	constexpr void ForEach(Vec2<T> min, Vec2<T> max, auto func) {
 		for (T y = min.Y; y <= max.Y; y++) {

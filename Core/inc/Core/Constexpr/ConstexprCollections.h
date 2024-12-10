@@ -691,7 +691,7 @@ namespace Constexpr {
             mData = new std::array<T, Capacity>();
             mData->fill(Sentinel);
         }
-		constexpr BigSet(T&& sentinel) : Sentinel(std::move(sentinel)) {
+		constexpr explicit BigSet(T&& sentinel) : Sentinel(std::move(sentinel)) {
 			mData = new std::array<T, Capacity>();
 			mData->fill(Sentinel);
 		}
