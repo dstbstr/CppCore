@@ -219,6 +219,12 @@ namespace Constexpr {
             mCurrentSize = 0;
         }
 
+		constexpr BigMap(Key&& sentinel) : Sentinel(std::make_pair<Key, Value>(std::move(sentinel), {})) {
+			mData = new std::array<std::pair<Key, Value>, Capacity>();
+			mData->fill(Sentinel);
+			mCurrentSize = 0;
+		}
+
         constexpr BigMap(const BigMap& other) : Sentinel(other.Sentinel), mCurrentSize(other.mCurrentSize) {
             mData = new std::array<std::pair<Key, Value>, Capacity>();
             *mData = *other.mData;
@@ -685,6 +691,10 @@ namespace Constexpr {
             mData = new std::array<T, Capacity>();
             mData->fill(Sentinel);
         }
+		constexpr BigSet(T&& sentinel) : Sentinel(std::move(sentinel)) {
+			mData = new std::array<T, Capacity>();
+			mData->fill(Sentinel);
+		}
         constexpr BigSet(const BigSet& other) : Sentinel(other.Sentinel), mCurrentSize(other.mCurrentSize) {
             mData = new std::array<T, Capacity>();
             *mData = *other.mData;
@@ -814,7 +824,6 @@ namespace Constexpr {
         */
 
     private:
-        //T Sentinel { std::is_same_v<std::string, std::remove_cvref_t<T>> ? "SentinelString" : std::is_arithmetic_v<T> ? 9919 : {} };
         T Sentinel{};
         std::array<T, Capacity>* mData;
         size_t mCurrentSize = 0;

@@ -118,9 +118,10 @@ namespace Constexpr {
     template<>
     struct Hasher<char> {
         constexpr size_t operator()(const char& c) const {
-            size_t result = detail::AllOnes;
-            result = (result >> 8) ^ detail::crc_table[(result ^ c) ^ 0xFF];
-            return result ^ detail::AllOnes;
+            //size_t result = detail::AllOnes;
+            //result = (result >> 8) ^ detail::crc_table[(result ^ c) ^ 0xFF];
+            //return result ^ detail::AllOnes;
+			return static_cast<size_t>(c);
         }
     };
 
