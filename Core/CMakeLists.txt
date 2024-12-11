@@ -15,10 +15,12 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Algorithms/ShuntingYard.test.cpp
 
 	src/Constexpr/ConstexprAlgorithms.cpp
+	src/Constexpr/ConstexprBits.cpp
 	src/Constexpr/ConstexprCollections.cpp
 	src/Constexpr/ConstexprGeometry.cpp
 	src/Constexpr/ConstexprMath.cpp
 	src/Constexpr/ConstexprMatrix.cpp
+	src/Constexpr/ConstexprRandom.cpp
 	src/Constexpr/ConstexprStrUtils.cpp
 
 	src/Instrumentation/ISink.cpp
@@ -35,4 +37,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Utilities/TimeUtils.cpp
 
 	src/BigInt.cpp
- "inc/Core/Constexpr/ConstexprRandom.h" "src/Constexpr/ConstexprRandom.cpp")
+	src/Concepts.tests.cpp
+)

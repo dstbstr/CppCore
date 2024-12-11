@@ -1,5 +1,7 @@
 #pragma once
 #include "Core/Platform/Types.h"
+#include "Core/Concepts.h"
+
 #include <limits>
 
 namespace Constexpr {
@@ -26,9 +28,8 @@ namespace Constexpr {
 			}
 		}
 
-		template<typename T>
-		constexpr auto Next(const T min, const T max, u32 prev) {
-			static_assert(std::is_integral_v<T> || std::is_floating_point_v<T>, "Next only works with numbers");
+		template<Numeric T>
+		[[nodiscard]] constexpr auto Next(const T min, const T max, u32 prev) {
 			auto next = _detail::LCG(prev);
 			if constexpr (std::is_integral_v<T>) {
 				return min + static_cast<T>(next % (max - min));

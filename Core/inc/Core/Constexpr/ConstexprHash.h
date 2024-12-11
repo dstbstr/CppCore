@@ -3,6 +3,8 @@
 #include <string_view>
 #include <type_traits>
 
+#include "Core/Concepts.h"
+
 namespace Constexpr {
     namespace detail {
         static constexpr unsigned int crc_table[256] = {
@@ -74,54 +76,10 @@ namespace Constexpr {
         }
     };
 
-    template<>
-    struct Hasher<int> {
-        constexpr size_t operator()(const int& t) const {
+    template<Integral T>
+    struct Hasher<T> {
+        constexpr size_t operator()(const T& t) const {
             return static_cast<size_t>(t);
-        }
-    };
-    template<>
-    struct Hasher<unsigned int> {
-        constexpr size_t operator()(const unsigned int& t) const {
-            return static_cast<size_t>(t);
-        }
-    };
-
-    template<>
-    struct Hasher<long> {
-        constexpr size_t operator()(const long& t) const {
-            return static_cast<size_t>(t);
-        }
-    };
-
-    template<>
-    struct Hasher<unsigned long> {
-        constexpr size_t operator()(const unsigned long& t) const {
-            return static_cast<size_t>(t);
-        }
-    };
-
-    template<>
-    struct Hasher<long long> {
-        constexpr size_t operator()(const long long& t) const {
-            return static_cast<size_t>(t);
-        }
-    };
-
-    template<>
-    struct Hasher<unsigned long long> {
-        constexpr size_t operator()(const unsigned long long& t) const {
-            return static_cast<size_t>(t);
-        }
-    };
-
-    template<>
-    struct Hasher<char> {
-        constexpr size_t operator()(const char& c) const {
-            //size_t result = detail::AllOnes;
-            //result = (result >> 8) ^ detail::crc_table[(result ^ c) ^ 0xFF];
-            //return result ^ detail::AllOnes;
-			return static_cast<size_t>(c);
         }
     };
 

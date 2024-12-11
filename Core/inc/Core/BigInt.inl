@@ -37,7 +37,7 @@ constexpr BigInt::BigInt(const char* number) {
     }
 }
 
-template<typename T, std::enable_if_t<std::is_integral_v<T>, int>>
+template<std::integral T>
 constexpr BigInt::BigInt(T number) {
     if constexpr (std::is_signed_v<T>) {
         if (number < 0) {
@@ -90,6 +90,7 @@ constexpr bool BigInt::IsEven() const {
 constexpr bool operator==(const BigInt& lhs, const BigInt& rhs) {
     return lhs.negative == rhs.negative && lhs.digits == rhs.digits;
 }
+
 constexpr bool operator==(const BigInt& lhs, bool rhs) {
     return lhs.IsZero() != rhs;
 }
@@ -121,6 +122,7 @@ constexpr bool operator==(long long lhs, const BigInt& rhs) {
 constexpr bool operator==(unsigned long long lhs, const BigInt& rhs) {
     return rhs == lhs;
 }
+
 
 constexpr bool operator!=(const BigInt& lhs, const BigInt& rhs) {
     return !(lhs == rhs);
@@ -938,6 +940,9 @@ constexpr BigInt::operator long long() const {
 }
 constexpr BigInt::operator unsigned long long() const {
     return to_ull();
+}
+constexpr BigInt::operator double() const {
+	return static_cast<double>(to_ll());
 }
 
 constexpr bool BigInt::is_ull() const {

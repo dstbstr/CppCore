@@ -6,6 +6,7 @@
 #include <ostream>
 #include <algorithm>
 
+#include "Core/Concepts.h"
 #include "Constexpr/ConstexprMath.h"
 #include "Constexpr/ConstexprStrUtils.h"
 
@@ -26,8 +27,8 @@ public:
     constexpr explicit BigInt(const char* number);
     constexpr explicit BigInt(bool val);
 
-    template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
-    constexpr BigInt(T number = 0);
+    //template<std::integral T>
+    constexpr BigInt(std::integral auto number = 0);
 
     constexpr BigInt(const BigInt& other);
     constexpr BigInt(BigInt&& other);
@@ -37,7 +38,6 @@ public:
     ~BigInt() = default;
 
     // Comparisons
-
     friend constexpr bool operator==(const BigInt& lhs, const BigInt& rhs);
     friend constexpr bool operator==(const BigInt& lhs, bool rhs);
     friend constexpr bool operator==(const BigInt& lhs, char rhs);
@@ -237,6 +237,7 @@ public:
     constexpr explicit operator char() const;
     constexpr explicit operator long long() const;
     constexpr explicit operator unsigned long long() const;
+    constexpr explicit operator double() const;
 
     constexpr bool is_ull() const;
     constexpr bool is_ll() const;

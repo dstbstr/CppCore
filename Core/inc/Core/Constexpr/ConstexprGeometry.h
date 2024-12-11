@@ -51,7 +51,6 @@ struct std::hash<RowCol> {
 };
 
 namespace Constexpr {
-    template<>
     constexpr std::string ToString(RowCol rc) {
         return "{" + Constexpr::ToString(rc.Row) + "," + Constexpr::ToString(rc.Col) + "}";
     }

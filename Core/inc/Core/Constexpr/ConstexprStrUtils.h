@@ -3,6 +3,9 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <ranges>
+
+#include "Core/Concepts.h"
 
 namespace Constexpr {
     constexpr size_t Strlen(const char* str) {
@@ -13,10 +16,10 @@ namespace Constexpr {
         return c >= '0' && c <= '9';
     }
 
-    template<typename T>
+    template<Integral T>
     constexpr std::string ToString(T val) {
         bool negate = false;
-        if constexpr (std::is_signed_v<T>) {
+        if constexpr (Signed<T>) {
             if (val < 0) {
                 negate = true;
                 val = -val;
@@ -37,28 +40,19 @@ namespace Constexpr {
         return result;
     }
 
-    template<>
     constexpr std::string ToString(std::string_view val) {
         return std::string(val);
     }
+	constexpr std::string ToString(const std::string& val) {
+		return val;
+	}
 
-    constexpr std::vector<std::string_view> Split(std::string_view input, std::string_view delimiter, bool keepEmpties = false) {
-        size_t last = 0;
-        size_t next = 0;
-        std::vector<std::string_view> result;
-
-        while ((next = input.find(delimiter, last)) != std::string::npos) {
-            if (keepEmpties || next - last > 0) {
-                result.push_back(input.substr(last, next - last));
-            }
-            last = next + delimiter.size();
-        }
-
-        auto lastEntry = input.substr(last);
-        if (lastEntry.length() > 0) {
-            result.push_back(lastEntry);
-        }
-        return result;
+    constexpr auto Split(std::string_view input, std::string_view delimiter, bool keepEmpties = false) {
+        return input
+            | std::views::split(delimiter)
+            | std::views::filter([keepEmpties](auto sv) { return keepEmpties || !sv.empty(); })
+			| std::views::transform([](auto sv) { return std::string_view(&*sv.begin(), std::ranges::distance(sv)); })
+            | std::ranges::to<std::vector>();
     }
 
     constexpr size_t HexToDec(char c) {
@@ -103,7 +97,7 @@ namespace Constexpr {
         if (input[pos] < '0' || input[pos] > '9') return false;
 
         result += (input[pos] - '0') * place;
-        if constexpr (std::is_signed_v<T>) {
+        if constexpr (Signed<T>) {
             if (input[0] == '-') {
                 result = -result;
             }

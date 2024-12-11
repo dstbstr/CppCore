@@ -3,43 +3,16 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <ranges>
 
 #include "Core/Constexpr/ConstexprStrUtils.h"
 
 namespace Constexpr {
-    template<typename Collection>
-    constexpr std::string JoinVec(std::string&& delimiter, Collection&& input) {
-        std::string result;
-        bool first = true;
-        for (const auto& elem : input) {
-            if (first) first = false;
-            else result += delimiter;
-            if constexpr (std::is_same_v<decltype(elem), const std::string&>) {
-                result += elem;
-            }
-            else {
-                result += Constexpr::ToString(elem);
-            }
-        }
-
-        return result;
-    }
-
     constexpr std::string JoinVec(std::string&& delimiter, const auto& input) {
-        std::string result;
-        bool first = true;
-        for (const auto& elem : input) {
-            if (first) first = false;
-            else result += delimiter;
-            if constexpr (std::is_same_v<decltype(elem), const std::string&>) {
-                result += elem;
-            }
-            else {
-                result += Constexpr::ToString(elem);
-            }
-        }
-
-        return result;
+		return input
+			| std::views::transform([](const auto& elem) { return Constexpr::ToString(elem); })
+			| std::views::join_with(delimiter)
+			| std::ranges::to<std::string>();
     }
 
     constexpr std::string JoinVec(char&& delimiter, const auto& input) {
@@ -59,21 +32,11 @@ namespace Constexpr {
 
     template<typename Collection>
     constexpr auto FindMin(const Collection& collection) {
-        auto min = *collection.begin();
-        for (const auto& elem : collection) {
-            min = std::min(min, elem);
-        }
-
-        return min;
+		return *std::min_element(collection.begin(), collection.end());
     }
 
     template<typename Collection>
     constexpr auto FindMax(const Collection& collection) {
-        auto max = *collection.begin();
-        for (const auto& elem : collection) {
-            max = std::max(max, elem);
-        }
-
-        return max;
+		return *std::max_element(collection.begin(), collection.end());
     }
 }

@@ -1,4 +1,9 @@
 #include "Core/BigInt.h"
+#include "Core/Concepts.h"
+
+static_assert(Numeric<BigInt>, "BigInt should be Numeric");
+static_assert(Signed<BigInt>, "BigInt should be signed");
+static_assert(Integral<BigInt>, "BigInt should be integral");
 
 static_assert(BigInt(1) == BigInt("1"), "1 != 1");
 static_assert(BigInt(0) == BigInt(0), "0 != 0");
