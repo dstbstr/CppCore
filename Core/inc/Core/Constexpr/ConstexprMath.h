@@ -462,6 +462,21 @@ namespace Constexpr {
         return t;
     }
 
+    template<Integral T>
+    std::vector<T> GetNextChoose(const std::vector<T>& current, T max) {
+		std::vector<T> result = current;
+		for (size_t i = current.size() - 1; i < current.size(); i--) {
+			if (current[i] < max - (current.size() - i)) {
+				result[i]++;
+				for (size_t j = i + 1; j < current.size(); j++) {
+					result[j] = result[j - 1] + 1;
+				}
+				return result;
+			}
+		}
+		return {};
+    }
+
     namespace ConstexprMathTests {
         bool RunTests();
     }
