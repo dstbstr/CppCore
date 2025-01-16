@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <string_view>
 
 template<typename T>
 concept Numeric = requires(T t) {
@@ -22,3 +23,6 @@ concept Signed = Numeric<T> && requires {
 
 template<typename T>
 concept Unsigned = !Signed<T>;
+
+template<typename T>
+concept StringLike = std::is_convertible_v<T, std::string_view>;

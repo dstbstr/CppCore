@@ -140,28 +140,10 @@ namespace {
     }
 }
 
-constexpr std::array<u32, 2> SplitValBig(u32 input, u32 bits) {
-    return SplitValImpl(input, bits);
-}
-
-constexpr std::array<u32, 2> SplitValLittle(u32 input, u32 bits) {
-    return SplitValImpl(input, bits);
-}
-
 constexpr std::array<u32, 2> SplitVal(u32 input, u32 bits) {
-    if constexpr (std::endian::native == std::endian::big) {
-        return SplitValBig(input, bits);
-    }
-    else {
-        return SplitValLittle(input, bits);
-    }
+    return SplitValImpl(input, bits);
 }
 
 constexpr std::array<u16, 2> SplitVal(u16 input, u16 bits) {
-    if constexpr (std::endian::native == std::endian::big) {
-        return SplitValImpl(input, bits);
-    }
-    else {
-        return SplitValImpl(input, bits);
-    }
+    return SplitValImpl(input, bits);
 }

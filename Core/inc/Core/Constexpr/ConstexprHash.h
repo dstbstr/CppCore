@@ -2,6 +2,7 @@
 
 #include <string_view>
 #include <type_traits>
+#include <ranges>
 
 #include "Core/Concepts.h"
 
@@ -83,56 +84,33 @@ namespace Constexpr {
         }
     };
 
-    template<>
-    struct Hasher<std::string_view> {
-        constexpr size_t operator()(const std::string_view& sv) const {
+    template<StringLike T>
+    struct Hasher<T> {
+        constexpr size_t operator()(const T& str) const {
+            return std::ranges::fold_left(str, detail::AllOnes, [](size_t result, char c) {
+                return (result >> 8) ^ detail::crc_table[(result ^ c) & 0xFF];
+                });
+        }
+    };
+
+    template<typename... Ts>
+    struct Hasher<std::tuple<Ts...>> {
+        constexpr size_t operator()(std::tuple<Ts...> tuple) const {
             size_t result = detail::AllOnes;
-            for (auto c : sv) {
-                result = (result >> 8) ^ detail::crc_table[(result ^ c) & 0xFF];
-            }
-
-            return result ^ detail::AllOnes;
-        }
-    };
-
-    template<>
-    struct Hasher<std::string> {
-        constexpr size_t operator()(const std::string& str) const {
-            size_t result = detail::AllOnes;
-            for (auto c : str) {
-                result = (result >> 8) ^ detail::crc_table[(result ^ c) & 0xFF];
-            }
-
-            return result ^ detail::AllOnes;
-        }
-    };
-
-    template<typename T, typename U>
-    struct Hasher<std::tuple<T, U>> {
-        constexpr size_t operator()(std::tuple<T, U> tuple) const {
-            return detail::Cantor(Hasher<T>()(tuple.first), Hasher<U>()(tuple.second));
-        }
-    };
-
-    template<typename T, typename U, typename W>
-    struct Hasher<std::tuple<T, U, W>> {
-        constexpr size_t operator()(std::tuple<T, U, W> tuple) const {
-            return GenericHash(
-                Hasher<T>()(std::get<0>(tuple)), 
-                Hasher<U>()(std::get<1>(tuple)), 
-                Hasher<W>()(std::get<2>(tuple)));
+            std::apply([&result](const auto&&... args) {
+                ((result = detail::Cantor(result, Hasher<std::decay_t<decltype(args)>>()(args))), ...);
+            }, tuple);
+            return result;
         }
     };
 
     template<typename T>
     struct Hasher<std::vector<T>> {
         constexpr size_t operator()(const std::vector<T>& v) const {
-            size_t result = detail::AllOnes;
             auto hash = Hasher<T>();
-            for (const auto& e : v) {
-                result = detail::Cantor(result, hash(e));
-            }
-            return result;
+            return std::ranges::fold_left(v, detail::AllOnes, [&hash](size_t result, const auto& e) {
+                return detail::Cantor(result, hash(e));
+            });
         }
     };
 
