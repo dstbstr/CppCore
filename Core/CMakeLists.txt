@@ -24,6 +24,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Constexpr/ConstexprStrUtils.cpp
 
 	src/Instrumentation/ISink.cpp
+	src/Instrumentation/Benchmark/ResourceMonitor_Windows.cpp
 	src/Instrumentation/Logging.cpp
 	src/Instrumentation/LogWriter/StdOutLogWriter.cpp
 

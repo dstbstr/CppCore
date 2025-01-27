@@ -3,6 +3,8 @@
 #include <string_view>
 #include <type_traits>
 #include <ranges>
+#include <vector>
+#include <algorithm> // fold_left
 
 #include "Core/Concepts.h"
 
@@ -87,9 +89,18 @@ namespace Constexpr {
     template<StringLike T>
     struct Hasher<T> {
         constexpr size_t operator()(const T& str) const {
+            
             return std::ranges::fold_left(str, detail::AllOnes, [](size_t result, char c) {
                 return (result >> 8) ^ detail::crc_table[(result ^ c) & 0xFF];
                 });
+                
+            /*
+            size_t result = detail::AllOnes;
+            for(auto c : str) {
+                result = (result >> 8) ^ detail::crc_table[(result ^ c) & 0xFF];
+            }
+            return result;
+            */
         }
     };
 
@@ -108,9 +119,18 @@ namespace Constexpr {
     struct Hasher<std::vector<T>> {
         constexpr size_t operator()(const std::vector<T>& v) const {
             auto hash = Hasher<T>();
+            
             return std::ranges::fold_left(v, detail::AllOnes, [&hash](size_t result, const auto& e) {
                 return detail::Cantor(result, hash(e));
             });
+            
+            /*
+            size_t result = detail::AllOnes;
+            for(const auto& e : v) {
+                result = detail::Cantor(result, hash(e));
+            }
+            return result;
+            */
         }
     };
 

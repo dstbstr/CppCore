@@ -1,6 +1,6 @@
 project(CoreTest)
 
-add_executable(${PROJECT_NAME} src/Main.cpp "src/Threading/Tasks.test.cpp")
+add_executable(${PROJECT_NAME} src/Main.cpp )
 
 target_link_libraries(${PROJECT_NAME} gtest)
 target_link_libraries(${PROJECT_NAME} gmock)
@@ -20,6 +20,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/DesignPatterns/ServiceLocator.test.cpp
 
 	src/Instrumentation/Logging.test.cpp
+	src/Instrumentation/Benchmark/Stats.test.cpp
 
 	src/Macros/PreProcessorOverride.test.cpp
 

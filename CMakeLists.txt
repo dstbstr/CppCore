@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 project("Cpp Core")
 
 set(ShouldTest CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
