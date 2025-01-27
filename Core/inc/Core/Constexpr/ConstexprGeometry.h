@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <ostream>
 
@@ -7,14 +8,14 @@
 #include "Core/Constexpr/ConstexprStrUtils.h"
 #include "Core/Constexpr/ConstexprHash.h"
 
-template<typename T>
-std::string ToString(T input);
-
 struct RowCol {
-    size_t Row;
-    size_t Col;
+    size_t Row{0};
+    size_t Col{0};
     constexpr bool operator==(const RowCol& rc) const {
         return Row == rc.Row && Col == rc.Col;
+    }
+    constexpr bool operator!=(const RowCol& rc) const {
+        return !(*this == rc);
     }
     constexpr bool operator<(const RowCol& rc) const {
         return Row != rc.Row ? Row < rc.Row : Col < rc.Col;
@@ -50,13 +51,7 @@ struct std::hash<RowCol> {
     }
 };
 
-template<>
-inline std::string ToString(RowCol rc) {
-    return "{" + ToString(rc.Row) + "," + ToString(rc.Col) + "}";
-}
-
 namespace Constexpr {
-    template<>
     constexpr std::string ToString(RowCol rc) {
         return "{" + Constexpr::ToString(rc.Row) + "," + Constexpr::ToString(rc.Col) + "}";
     }
@@ -410,16 +405,16 @@ struct std::hash<Vec4<T>> {
     }
 };
 
-constexpr size_t MDistance(const RowCol& pos) {
-    return pos.Row + pos.Col;
+constexpr u64 MDistance(const RowCol& pos) {
+    return static_cast<u64>(pos.Row) + pos.Col;
 }
 
-constexpr size_t MDistance(const RowCol& lhs, const RowCol& rhs) {
-    return Constexpr::AbsDistance(lhs.Row, rhs.Row) + Constexpr::AbsDistance(lhs.Col, rhs.Col);
+constexpr u64 MDistance(const RowCol& lhs, const RowCol& rhs) {
+    return static_cast<u64>(Constexpr::AbsDistance(lhs.Row, rhs.Row)) + Constexpr::AbsDistance(lhs.Col, rhs.Col);
 }
 
 template<template<typename> typename Container, typename T>
-constexpr size_t MDistance(Container<T> p) {
+constexpr u64 MDistance(Container<T> p) {
     using Raw = std::remove_cvref_t<Container<T>>;
     T sum = Constexpr::Abs(p.X) + Constexpr::Abs(p.Y);
     if constexpr (!std::is_same_v<Vec2<T>, Raw>) {
@@ -429,11 +424,11 @@ constexpr size_t MDistance(Container<T> p) {
         }
     }
 
-    return static_cast<size_t>(sum);
+    return static_cast<u64>(sum);
 }
 
 template<template<typename> typename Container, typename T>
-constexpr size_t MDistance(Container<T> a, Container<T> b) {
+constexpr u64 MDistance(Container<T> a, Container<T> b) {
     using Raw = std::remove_cvref_t<Container<T>>;
     T sum = Constexpr::AbsDistance(a.X, b.X) + Constexpr::AbsDistance(a.Y, b.Y);
     if constexpr (!std::is_same_v<Vec2<T>, Raw>) {
@@ -443,7 +438,7 @@ constexpr size_t MDistance(Container<T> a, Container<T> b) {
         }
     }
 
-    return static_cast<size_t>(sum);
+    return static_cast<u64>(sum);
 }
 
 namespace _Impl {
@@ -497,7 +492,7 @@ constexpr std::vector<Container<T>> GetAllNeighbors(const Container<T>& pos) {
     std::vector<Container<T>> result{};
     for (auto d : _Impl::GetDeltas<Container, T>()) {
         auto size = result.size();
-        for (auto i = 0; i < size; i++) {
+        for (size_t i = 0u; i < size; i++) {
             result.push_back(result[i] + d);
             result.push_back(result[i] - d);
         }
@@ -519,7 +514,7 @@ constexpr std::vector<Container<T>> GetAllNeighbors(Container<T> pos, Container<
 
     for (auto d : _Impl::GetDeltas<Container, T>()) {
         auto size = result.size();
-        for (auto i = 0; i < size; i++) {
+        for (size_t i = 0u; i < size; i++) {
             auto n = result[i];
             temp = n + d;
             AddValid();
@@ -610,6 +605,11 @@ namespace _Impl {
     }
 }
 
+template<typename Container>
+constexpr auto GetLimits(const std::vector<std::string>& lines) {
+    return Container{ static_cast<u32>(lines.size() - 1), static_cast<u32>(lines[0].size() - 1) };
+}
+
 template<template<typename> typename Container, typename T>
 constexpr void GetLimits(auto start, auto end, Container<T>& outMin, Container<T>& outMax) {
     outMin = _Impl::InitialMin<Container, T>;
@@ -673,6 +673,55 @@ constexpr void GetLimitsFromMap(const auto& map, RowCol& min, RowCol& max) {
     }
 }
 
+namespace Constexpr {
+    constexpr void ForEach(RowCol max, auto func) {
+        for (size_t row = 0; row <= max.Row; row++) {
+            for (size_t col = 0; col <= max.Col; col++) {
+                func(RowCol{ row, col });
+            }
+        }
+    }
+    constexpr void ForEach(RowCol min, RowCol max, auto func) {
+        for (size_t row = min.Row; row <= max.Row; row++) {
+            for (size_t col = min.Col; col <= max.Col; col++) {
+                func(RowCol{ row, col });
+            }
+        }
+    }
+
+    template<typename T>
+	constexpr void ForEach(Vec2<T> min, Vec2<T> max, auto func) {
+		for (T y = min.Y; y <= max.Y; y++) {
+			for (T x = min.X; x <= max.X; x++) {
+				func(Vec2<T>{ x, y });
+			}
+		}
+	}
+
+    template<typename T>
+	constexpr void ForEach(Vec3<T> min, Vec3<T> max, auto func) {
+		for (T x = min.X; x <= max.X; x++) {
+			for (T y = min.Y; y <= max.Y; y++) {
+				for (T z = min.Z; z <= max.Z; z++) {
+					func(Vec3<T>{ x, y, z });
+				}
+			}
+		}
+	}
+	template<typename T>
+	constexpr void ForEach(Vec4<T> min, Vec4<T> max, auto func) {
+        for (T x = min.X; x <= max.X; x++) {
+            for (T y = min.Y; y <= max.Y; y++) {
+                for (T z = min.Z; z <= max.Z; z++) {
+					for (T w = min.W; w <= max.W; w++) {
+						func(Vec4<T>{ x, y, z, w });
+					}
+                }
+            }
+        }
+    }
+}
+
 
 template<typename T>
 constexpr Vec3<T> DotProduct(const Vec3<T>& pos, const std::array<std::array<s32, 3>, 3>& matrix) {
@@ -711,6 +760,9 @@ struct Rect {
             TopLeft.Y <= p.Y && p.Y <= BottomRight.Y;
     }
 };
+
+template<typename Collection>
+constexpr Collection Origin{};
 
 namespace Constexpr {
     enum struct Orientation { Linear, Clockwise, CounterClockwise };

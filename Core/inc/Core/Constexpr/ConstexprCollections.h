@@ -3,11 +3,12 @@
 #include <vector>
 #include <array>
 #include <string>
-//#include <ranges>
+#include <ranges>
 #include <algorithm>
 #include <iterator>
 
 #include "Core/Constexpr/ConstexprHash.h"
+
 
 namespace Constexpr {
     /*
@@ -219,6 +220,12 @@ namespace Constexpr {
             mCurrentSize = 0;
         }
 
+		constexpr BigMap(Key&& sentinel) : Sentinel(std::make_pair<Key, Value>(std::move(sentinel), {})) {
+			mData = new std::array<std::pair<Key, Value>, Capacity>();
+			mData->fill(Sentinel);
+			mCurrentSize = 0;
+		}
+
         constexpr BigMap(const BigMap& other) : Sentinel(other.Sentinel), mCurrentSize(other.mCurrentSize) {
             mData = new std::array<std::pair<Key, Value>, Capacity>();
             *mData = *other.mData;
@@ -362,31 +369,23 @@ namespace Constexpr {
         */
 
         constexpr std::vector<Key> GetKeys() const {
-            std::vector<Key> result;
-            for (const auto& p : *mData) {
-                if (p != Sentinel) {
-                    result.push_back(p.first);
-                }
-            }
-            return result;
+            return *mData
+				| std::views::filter([this](const auto& p) { return p != Sentinel; })
+				| std::views::transform([](const auto& p) { return p.first; })
+				| std::ranges::to<std::vector>();
         }
 
         constexpr std::vector<Value> GetValues() const {
-            std::vector<Value> result;
-            for (const auto& p : *mData) {
-                if (p != Sentinel) {
-                    result.push_back(p.second);
-                }
-            }
-            return result;
+            return *mData
+				| std::views::filter([this](const auto& p) { return p != Sentinel; })
+				| std::views::transform([](const auto& p) { return p.second; })
+				| std::ranges::to<std::vector>();
         }
 
         constexpr std::vector<std::pair<Key, Value>> GetAllEntries() const {
-            std::vector<std::pair<Key, Value>> result;
-            std::copy_if(mData->begin(), mData->end(), std::back_inserter(result), [&](auto p) {
-                return p != Sentinel;
-                });
-            return result;
+            return *mData
+				| std::views::filter([this](const auto& p) { return p != Sentinel; })
+				| std::ranges::to<std::vector>();
         }
     private:
         std::array<std::pair<Key, Value>, Capacity>* mData{};
@@ -400,7 +399,7 @@ namespace Constexpr {
                 Sentinel = std::make_pair<Key, Value>("SentinelString", {});
             }
             else if constexpr (std::is_arithmetic_v<Key>) {
-                Sentinel = std::make_pair<Key, Value>(9919, {});
+                Sentinel = std::make_pair<Key, Value>(Key(9919), {});
             }
             else {
                 Sentinel = std::make_pair<Key, Value>({}, {}); //bleh
@@ -684,6 +683,10 @@ namespace Constexpr {
             mData = new std::array<T, Capacity>();
             mData->fill(Sentinel);
         }
+		constexpr explicit BigSet(T&& sentinel) : Sentinel(std::move(sentinel)) {
+			mData = new std::array<T, Capacity>();
+			mData->fill(Sentinel);
+		}
         constexpr BigSet(const BigSet& other) : Sentinel(other.Sentinel), mCurrentSize(other.mCurrentSize) {
             mData = new std::array<T, Capacity>();
             *mData = *other.mData;
@@ -813,7 +816,6 @@ namespace Constexpr {
         */
 
     private:
-        //T Sentinel { std::is_same_v<std::string, std::remove_cvref_t<T>> ? "SentinelString" : std::is_arithmetic_v<T> ? 9919 : {} };
         T Sentinel{};
         std::array<T, Capacity>* mData;
         size_t mCurrentSize = 0;

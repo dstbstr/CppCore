@@ -1,6 +1,6 @@
 project(CoreTest)
 
-add_executable(${PROJECT_NAME} src/Main.cpp "src/Threading/Tasks.test.cpp" )
+add_executable(${PROJECT_NAME} )
 
 target_link_libraries(${PROJECT_NAME} gtest)
 target_link_libraries(${PROJECT_NAME} gmock)
@@ -14,12 +14,14 @@ target_compile_options(${PROJECT_NAME} PRIVATE
           /W4 /WX /EHsc>)
 
 target_sources(${PROJECT_NAME} PRIVATE 
+	src/Main.cpp
 	src/DesignPatterns/Crtp.Test.cpp
 	src/DesignPatterns/Mixin.test.cpp
 	src/DesignPatterns/PubSub.test.cpp
 	src/DesignPatterns/ServiceLocator.test.cpp
 
 	src/Instrumentation/Logging.test.cpp
+	src/Instrumentation/Benchmark/Stats.test.cpp
 
 	src/Macros/PreProcessorOverride.test.cpp
 

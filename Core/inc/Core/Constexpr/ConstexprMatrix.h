@@ -63,9 +63,9 @@ namespace Constexpr {
 
         Mat<T, LhsRows, RhsCols> result{};
 
-        for (auto i = 0; i < LhsRows; i++) {
-            for (auto j = 0; j < RhsCols; j++) {
-                for (auto k = 0; k < RhsRows; k++) {
+        for (size_t i = 0u; i < LhsRows; i++) {
+            for (size_t j = 0u; j < RhsCols; j++) {
+                for (size_t k = 0u; k < RhsRows; k++) {
                     result[i][j] += lhs[i][k] * rhs[k][j];
                 }
             }
@@ -88,8 +88,8 @@ namespace Constexpr {
     template<typename T, size_t Rows, size_t Cols>
     [[nodiscard]] constexpr Mat<T, Rows, Cols> MultiplyMatrix(const Mat<T, Rows, Cols>& mat, T scalar) {
         auto result = mat;
-        for (auto i = 0; i < Rows; i++) {
-            for (auto j = 0; j < Cols; j++) {
+        for (size_t i = 0u; i < Rows; i++) {
+            for (size_t j = 0u; j < Cols; j++) {
                 result[i][j] *= scalar;
             }
         }
@@ -107,10 +107,10 @@ namespace Constexpr {
     [[nodiscard]] constexpr Mat<T, Size - 1> CreateMinor(const Mat<T, Size>& mat, size_t row, size_t col) {
         Mat<T, Size - 1> r{};
         size_t ri = 0, rj = 0;
-        for (auto i = 0; i < Size; i++) {
+        for (size_t i = 0u; i < Size; i++) {
             if (i == row) continue;
 
-            for (auto j = 0; j < Size; j++) {
+            for (size_t j = 0u; j < Size; j++) {
                 if (j == col) continue;
                 r[ri][rj] = mat[i][j];
                 if (rj == Size - 2) {
@@ -137,7 +137,7 @@ namespace Constexpr {
         else {
             T sign = 1;
             T result = 0;
-            for (auto i = 0; i < Size; i++) {
+            for (size_t i = 0u; i < Size; i++) {
                 result += mat[0][i] * Determinant(CreateMinor(mat, 0, i)) * sign;
                 sign *= -1;
             }
@@ -160,8 +160,8 @@ namespace Constexpr {
     [[nodiscard]] constexpr Mat<T, Size> CreateMatrixOfCoefficients(const Mat<T, Size>& mat) {
         auto result = mat;
         T mul = 1;
-        for (auto i = 0; i < Size; i++) {
-            for (auto j = 0; j < Size; j++) {
+        for (size_t i = 0u; i < Size; i++) {
+            for (size_t j = 0u; j < Size; j++) {
                 result[i][j] *= mul;
                 mul *= -1;
             }
@@ -195,7 +195,7 @@ namespace Constexpr {
             auto co = CreateMatrixOfCoefficients(minors);
 
             T determinant = 0;
-            for (auto i = 0; i < Size; i++) {
+            for (size_t i = 0u; i < Size; i++) {
                 determinant += (co[i][0] * mat[i][0]);
             }
             if (determinant == 0) return mat;

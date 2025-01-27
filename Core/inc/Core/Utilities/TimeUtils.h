@@ -6,55 +6,50 @@
 
 namespace TimeUtils {
 
-    enum TimeUnit { MICRO, MILLI, SECOND, MINUTE, HOUR, DAY, WEEK, YEAR };
+    enum struct TimeUnit { MICRO, MILLI, SECOND, MINUTE, HOUR, DAY, WEEK, YEAR };
 
-    //%Y/%m/%d %H:%M:%S
-    std::string DateTimeLocalToString(const std::chrono::system_clock::time_point& dateTime, const std::string& format);
-    std::string DateTimeLocalToString(const std::chrono::system_clock::time_point& dateTime);
-    std::string DateTimeLocalToString(const std::filesystem::file_time_type::clock::time_point& dateTime, const std::string& format);
-    std::string DateTimeLocalToString(const std::filesystem::file_time_type::clock::time_point& dateTime);
-    std::string DateTimeUtcToString(const std::chrono::system_clock::time_point& dateTime, const std::string& format);
-    std::string DateTimeUtcToString(const std::chrono::system_clock::time_point& dateTime);
-    std::string DateTimeUtcToString(const std::filesystem::file_time_type::clock::time_point& dateTime, const std::string& format);
-    std::string DateTimeUtcToString(const std::filesystem::file_time_type::clock::time_point& dateTime);
+    //%Y-%m-%d %H:%M:%S
+    std::string DateTimeLocalToString(const std::chrono::system_clock::time_point& dateTime, const char* format = nullptr);
+    //%Y-%m-%d %H:%M:%S
+    std::string DateTimeLocalToString(const std::filesystem::file_time_type::clock::time_point& dateTime, const char* format = nullptr);
+    //%Y-%m-%d %H:%M:%S
+    std::string DateTimeUtcToString(const std::chrono::system_clock::time_point& dateTime, const char* format = nullptr);
+    //%Y-%m-%d %H:%M:%S
+    std::string DateTimeUtcToString(const std::filesystem::file_time_type::clock::time_point& dateTime, const char* format = nullptr);
 
-    //%Y/%m/%d %H:%M:%S
-    std::string TodayNowLocalToString(const std::string& format);
-    std::string TodayNowLocalToString();
-    std::string TodayNowUtcToString(const std::string& format);
-    std::string TodayNowUtcToString();
+    //%Y-%m-%d %H:%M:%S
+    std::string TodayNowLocalToString(const char* format = nullptr);
+    //%Y-%m-%d %H:%M:%S
+    std::string TodayNowUtcToString(const char* format = nullptr);
 
-    //%Y/%m/%d
-    std::string DateLocalToString(const std::chrono::system_clock::time_point& date, const std::string& format);
-    std::string DateLocalToString(const std::chrono::system_clock::time_point& date);
-    std::string DateLocalToString(const std::filesystem::file_time_type::clock::time_point& date, const std::string& format);
-    std::string DateLocalToString(const std::filesystem::file_time_type::clock::time_point& date);
-    std::string DateUtcToString(const std::chrono::system_clock::time_point& date, const std::string& format);
-    std::string DateUtcToString(const std::chrono::system_clock::time_point& date);
-    std::string DateUtcToString(const std::filesystem::file_time_type::clock::time_point& date, const std::string& format);
-    std::string DateUtcToString(const std::filesystem::file_time_type::clock::time_point& date);
+    //%Y-%m-%d
+    std::string DateLocalToString(const std::chrono::system_clock::time_point& date, const char* format = nullptr);
+    //%Y-%m-%d
+    std::string DateLocalToString(const std::filesystem::file_time_type::clock::time_point& date, const char* format = nullptr);
+    //%Y-%m-%d
+    std::string DateUtcToString(const std::chrono::system_clock::time_point& date, const char* format = nullptr);
+    //%Y-%m-%d
+    std::string DateUtcToString(const std::filesystem::file_time_type::clock::time_point& date, const char* format = nullptr);
 
-    //%Y/%m/%d
-    std::string TodayLocalToString(const std::string& format);
-    std::string TodayLocalToString();
-    std::string TodayUtcToString(const std::string& format);
-    std::string TodayUtcToString();
+    //%Y-%m-%d
+    std::string TodayLocalToString(const char* format = nullptr);
+    //%Y-%m-%d
+    std::string TodayUtcToString(const char* format = nullptr);
 
     //%H:%M:%S
-    std::string TimeLocalToString(const std::chrono::system_clock::time_point& time, const std::string& format);
-    std::string TimeLocalToString(const std::chrono::system_clock::time_point& time);
-    std::string TimeLocalToString(const std::filesystem::file_time_type::clock::time_point& time, const std::string& format);
-    std::string TimeLocalToString(const std::filesystem::file_time_type::clock::time_point& time);
-    std::string TimeUtcToString(const std::chrono::system_clock::time_point& time, const std::string& format);
-    std::string TimeUtcToString(const std::chrono::system_clock::time_point& time);
-    std::string TimeUtcToString(const std::filesystem::file_time_type::clock::time_point& time, const std::string& format);
-    std::string TimeUtcToString(const std::filesystem::file_time_type::clock::time_point& time);
+    std::string TimeLocalToString(const std::chrono::system_clock::time_point& time, const char* format = nullptr);
+    //%H:%M:%S
+    std::string TimeLocalToString(const std::filesystem::file_time_type::clock::time_point& time, const char* format = nullptr);
+    //%H:%M:%S
+    std::string TimeUtcToString(const std::chrono::system_clock::time_point& time, const char* format = nullptr);
+    //%H:%M:%S
+    std::string TimeUtcToString(const std::filesystem::file_time_type::clock::time_point& time, const char* format = nullptr);
 
     //%H:%M:%S
-    std::string NowLocalToString(const std::string& format);
-    std::string NowLocalToString();
-    std::string NowUtcToString(const std::string& format);
-    std::string NowUtcToString();
+    std::string NowLocalToString(const char* format = nullptr);
+    //%H:%M:%S
+    std::string NowUtcToString(const char* format = nullptr);
+
 
     std::chrono::system_clock::time_point StringToTimePoint(const std::string& timeString, const std::string& format);
 

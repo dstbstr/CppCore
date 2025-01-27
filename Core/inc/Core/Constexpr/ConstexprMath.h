@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Core/Platform/Types.h"
+#include "Core/Concepts.h"
+#include "Core/Constexpr/ConstexprStrUtils.h"
+
 #include <vector>
 #include <array>
 #include <string_view>
@@ -13,7 +17,7 @@ namespace Constexpr {
 
     template<typename T>
     constexpr T Abs(T t) {
-        if constexpr (std::is_signed_v<T>) {
+        if constexpr (Signed<T>) {
             return t < 0 ? -t : t;
         }
         else {
@@ -24,6 +28,10 @@ namespace Constexpr {
     template<typename T>
     constexpr T AbsDistance(T lhs, T rhs) {
         return lhs < rhs ? rhs - lhs : lhs - rhs;
+    }
+
+    constexpr size_t CountDigits(Numeric auto val) {
+        return Constexpr::ToString(val).size();
     }
 
     template<typename T>
@@ -43,9 +51,8 @@ namespace Constexpr {
             : std::numeric_limits<double>::quiet_NaN();
     }
 
-    template<typename T, typename PowType>
+    template<typename T, Integral PowType>
     constexpr T Pow(T val, PowType pow) {
-        static_assert(!std::is_floating_point_v<PowType>, "This power only works with integers");
         if (pow == 0) return 1;
 
         T result = val;
@@ -55,9 +62,8 @@ namespace Constexpr {
         return result;
     }
 
-    template<typename T>
+    template<Integral T>
     constexpr T Factorial(T val) {
-        static_assert(!std::is_floating_point_v<T>, "Factorial works with integral types");
         T result = 1;
         while (val > 1) {
             result *= val--;
@@ -67,10 +73,10 @@ namespace Constexpr {
     namespace Detail {
         static constexpr std::array<uint8_t, 32> DeBruijnBitPosition = { 0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30, 8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31 };
     }
+
     //Lovingly stolen from here: https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
-    template<typename T>
+    template<Integral T>
     constexpr T Log2I(T v) {
-        static_assert(!std::is_floating_point_v<T>, "Log2I must be given an integral type");
         v |= v >> 1;
         v |= v >> 2;
         v |= v >> 4;
@@ -79,10 +85,8 @@ namespace Constexpr {
         return static_cast<T>(Detail::DeBruijnBitPosition[static_cast<size_t>(v * 0x07C4ACDDU) >> 27]);
     }
 
-    template<typename T>
+    template<Unsigned T>
     constexpr T MulMod(T lhs, T rhs, T mod) {
-        static_assert(std::is_unsigned_v<T>, "MulMod depends on unsigned types");
-
         T result = 0;
         T temp;
         T two = 2;
@@ -107,9 +111,8 @@ namespace Constexpr {
         return result;
     }
 
-    template<typename T>
+    template<Integral T>
     constexpr T ModPow(T base, T exp, T mod) {
-        static_assert(!std::is_floating_point_v<T>, "Type must not be floating point");
         const T zero = 0;
         const T one = 1;
         const T two = 2;
@@ -139,14 +142,14 @@ namespace Constexpr {
         return result;
     }
 
-    template<typename T>
+    template<Integral T>
     constexpr T EuclideanModulo(T value, T modulus) {
         if (modulus == 0) return 0;
         T remainder = value % modulus;
         return remainder >= 0 ? remainder : remainder + Abs(modulus);
     }
 
-    template<typename T = size_t>
+    template<typename T = u64>
     constexpr T FromBase26(std::string_view str) {
         T pow = 1;
         T result = 0;
@@ -159,12 +162,11 @@ namespace Constexpr {
         return result - 1;
     }
 
-    template<typename T>
+    template<Integral T>
     constexpr auto KnownPrimes = std::array<T, 46>{ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199 };
 
-    template<typename T>
+    template<Integral T>
     constexpr std::vector<T> GetPrimes(T max) {
-        static_assert(!std::is_floating_point_v<T>);
         if (max <= KnownPrimes<T>.back()) {
 			return std::views::take_while(KnownPrimes<T>, [max](auto p) { return p <= max; })
 				| std::ranges::to<std::vector<T>>();
@@ -172,16 +174,17 @@ namespace Constexpr {
         std::vector<bool> candidates(max + 1, true);
 
         std::vector<T> result{};
+        result.reserve(max / 2);
         auto maxFactor = static_cast<T>(Sqrt(static_cast<double>(max) + 1));
         for (T prime = 2; prime <= maxFactor; prime++) {
             if (!candidates[prime]) continue;
             result.push_back(prime);
-            for (T factor = prime * prime; factor < max + 1; factor += prime) {
+            for (T factor = prime * prime; factor <= max; factor += prime) {
                 candidates[factor] = false;
             }
         }
 
-        for (T prime = maxFactor + 1; prime < max + 1; prime++) {
+        for (T prime = maxFactor + 1; prime <= max; prime++) {
             if (candidates[prime]) {
                 result.push_back(prime);
             }
@@ -190,9 +193,8 @@ namespace Constexpr {
         return result;
     }
 
-    template<size_t Max, typename T>
+    template<size_t Max, Integral T>
     constexpr std::vector<T> GetPrimes() {
-        static_assert(!std::is_floating_point_v<T>);
         if constexpr (Max <= KnownPrimes<T>.back()) {
             return std::views::take_while(KnownPrimes<T>, [](auto p) { return p <= Max; })
                 | std::ranges::to<std::vector<T>>();
@@ -206,12 +208,12 @@ namespace Constexpr {
             for (T prime = 2; prime <= maxFactor; prime++) {
                 if (!candidates[prime]) continue;
                 result.push_back(prime);
-                for (size_t factor = static_cast<size_t>(prime * prime); factor < Max + 1; factor += prime) {
+                for (size_t factor = static_cast<size_t>(prime * prime); factor <= Max; factor += prime) {
                     candidates[factor] = false;
                 }
             }
 
-            for (T prime = maxFactor + 1; prime < Max + 1; prime++) {
+            for (T prime = maxFactor + 1; prime <= Max; prime++) {
                 if (candidates[prime]) {
                     result.push_back(prime);
                 }
@@ -269,26 +271,24 @@ namespace Constexpr {
         return result;
     }
 
-    template<typename T>
+    template<Integral T>
     constexpr std::vector<T> GetDivisors(T input) {
-        static_assert(std::is_integral_v<T>, "GetDivisors only works with integral types");
-
-        auto last = static_cast<T>(Sqrt(input));
+        auto last = static_cast<T>(Sqrt(static_cast<double>(input)));
         auto result = std::vector<T>{};
-
+        result.reserve(input / 2);
         for (T i = 1; i < last; i++) {
             if (input % i == 0) {
-                result.push_back(i);
-                result.push_back(input / i);
+                result.emplace_back(i);
+                result.emplace_back(input / i);
             }
         }
 
         if (last * last == input) {
-            result.push_back(last);
+            result.emplace_back(last);
         }
         else if (input % last == 0) {
-            result.push_back(last);
-            result.push_back(input / last);
+            result.emplace_back(last);
+            result.emplace_back(input / last);
         }
 
         return result;
@@ -332,12 +332,12 @@ namespace Constexpr {
             }
             T result = 1;
             std::vector<size_t> indexes;
-            for (auto i = 0; i < factors.size(); i++) {
+            for (size_t i = 0u; i < factors.size(); i++) {
                 indexes.push_back(0);
             }
 
             auto oneListDone = [&]() {
-                for (auto i = 0; i < indexes.size(); i++) {
+                for (size_t i = 0u; i < indexes.size(); i++) {
                     if (indexes[i] == factors[i].size()) {
                         return true;
                     }
@@ -348,21 +348,21 @@ namespace Constexpr {
             std::vector<T> values;
             while (!oneListDone()) {
                 values.clear();
-                for (auto i = 0; i < indexes.size(); i++) {
+                for (size_t i = 0u; i < indexes.size(); i++) {
                     values.push_back(factors[i][indexes[i]]);
                 }
 
                 auto min = *std::min_element(values.begin(), values.end());
 
                 result *= min;
-                for (auto i = 0; i < indexes.size(); i++) {
+                for (size_t i = 0u; i < indexes.size(); i++) {
                     if (values[i] == min) {
                         indexes[i]++;
                     }
                 }
             }
 
-            for (auto i = 0; i < indexes.size(); i++) {
+            for (size_t i = 0u; i < indexes.size(); i++) {
                 for (auto index = indexes[i]; index < factors[i].size(); index++) {
                     result *= factors[i][indexes[i]];
                 }
@@ -425,9 +425,8 @@ namespace Constexpr {
         return false;
     }
 
-    template<typename T>
+    template<Signed T>
     constexpr T MultiplicativeInverse(T a, T n) {
-        static_assert(T(-1) < T(0), "MultiplicativeInverse requires signed numbers");
         T t = 0;
         T newT = 1;
         T r = n;
@@ -453,6 +452,21 @@ namespace Constexpr {
         }
 
         return t;
+    }
+
+    template<Integral T>
+    std::vector<T> GetNextChoose(const std::vector<T>& current, T max) {
+		std::vector<T> result = current;
+		for (size_t i = current.size() - 1; i < current.size(); i--) {
+			if (current[i] < max - (current.size() - i)) {
+				result[i]++;
+				for (size_t j = i + 1; j < current.size(); j++) {
+					result[j] = result[j - 1] + 1;
+				}
+				return result;
+			}
+		}
+		return {};
     }
 
     namespace ConstexprMathTests {

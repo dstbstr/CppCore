@@ -15,13 +15,16 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Algorithms/ShuntingYard.test.cpp
 
 	src/Constexpr/ConstexprAlgorithms.cpp
+	src/Constexpr/ConstexprBits.cpp
 	src/Constexpr/ConstexprCollections.cpp
 	src/Constexpr/ConstexprGeometry.cpp
 	src/Constexpr/ConstexprMath.cpp
 	src/Constexpr/ConstexprMatrix.cpp
+	src/Constexpr/ConstexprRandom.cpp
 	src/Constexpr/ConstexprStrUtils.cpp
 
 	src/Instrumentation/ISink.cpp
+	src/Instrumentation/Benchmark/ResourceMonitor_Windows.cpp
 	src/Instrumentation/Logging.cpp
 	src/Instrumentation/LogWriter/StdOutLogWriter.cpp
 
@@ -35,4 +38,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Utilities/TimeUtils.cpp
 
 	src/BigInt.cpp
-)
+	src/Concepts.tests.cpp
+ )

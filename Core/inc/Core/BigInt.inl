@@ -37,7 +37,7 @@ constexpr BigInt::BigInt(const char* number) {
     }
 }
 
-template<typename T, std::enable_if_t<std::is_integral_v<T>, int>>
+template<std::integral T>
 constexpr BigInt::BigInt(T number) {
     if constexpr (std::is_signed_v<T>) {
         if (number < 0) {
@@ -90,6 +90,7 @@ constexpr bool BigInt::IsEven() const {
 constexpr bool operator==(const BigInt& lhs, const BigInt& rhs) {
     return lhs.negative == rhs.negative && lhs.digits == rhs.digits;
 }
+
 constexpr bool operator==(const BigInt& lhs, bool rhs) {
     return lhs.IsZero() != rhs;
 }
@@ -99,7 +100,10 @@ constexpr bool operator==(const BigInt& lhs, char rhs) {
 constexpr bool operator==(const BigInt& lhs, int rhs) {
     return lhs == BigInt(rhs);
 }
-constexpr bool operator==(const BigInt& lhs, size_t rhs) {
+constexpr bool operator==(const BigInt& lhs, long long rhs) {
+    return lhs == BigInt(rhs);
+}
+constexpr bool operator==(const BigInt& lhs, unsigned long long rhs) {
     return lhs == BigInt(rhs);
 }
 
@@ -112,9 +116,13 @@ constexpr bool operator==(char lhs, const BigInt& rhs) {
 constexpr bool operator==(int lhs, const BigInt& rhs) {
     return BigInt(lhs) == rhs;
 }
-constexpr bool operator==(size_t lhs, const BigInt& rhs) {
+constexpr bool operator==(long long lhs, const BigInt& rhs) {
     return rhs == lhs;
 }
+constexpr bool operator==(unsigned long long lhs, const BigInt& rhs) {
+    return rhs == lhs;
+}
+
 
 constexpr bool operator!=(const BigInt& lhs, const BigInt& rhs) {
     return !(lhs == rhs);
@@ -129,7 +137,10 @@ constexpr bool operator!=(const BigInt& lhs, char rhs) {
 constexpr bool operator!=(const BigInt& lhs, int rhs) {
     return !(lhs == rhs);
 }
-constexpr bool operator!=(const BigInt& lhs, size_t rhs) {
+constexpr bool operator!=(const BigInt& lhs, long long rhs) {
+    return !(lhs == rhs);
+}
+constexpr bool operator!=(const BigInt& lhs, unsigned long long rhs) {
     return !(lhs == rhs);
 }
 constexpr bool operator!=(bool lhs, const BigInt& rhs) {
@@ -141,7 +152,10 @@ constexpr bool operator!=(char lhs, const BigInt& rhs) {
 constexpr bool operator!=(int lhs, const BigInt& rhs) {
     return !(lhs == rhs);
 }
-constexpr bool operator!=(size_t lhs, const BigInt& rhs) {
+constexpr bool operator!=(long long lhs, const BigInt& rhs) {
+    return !(lhs == rhs);
+}
+constexpr bool operator!=(unsigned long long lhs, const BigInt& rhs) {
     return !(lhs == rhs);
 }
 
@@ -157,33 +171,39 @@ constexpr bool operator<(const BigInt& lhs, const BigInt& rhs) {
     }
     return false;
 }
-constexpr bool operator<(size_t lhs, const BigInt& rhs) {
-    return BigInt(lhs) < rhs;
-}
-constexpr bool operator<(const BigInt& lhs, size_t rhs) {
-    return lhs < BigInt(rhs);
-}
-
 constexpr bool operator<(long long lhs, const BigInt& rhs) {
     return BigInt(lhs) < rhs;
 }
+constexpr bool operator<(unsigned long long lhs, const BigInt& rhs) {
+    return BigInt(lhs) < rhs;
+}
+constexpr bool operator<(const BigInt& lhs, long long rhs) {
+    return lhs < BigInt(rhs);
+}
+constexpr bool operator<(const BigInt& lhs, unsigned long long rhs) {
+    return lhs < BigInt(rhs);
+}
+
 constexpr bool operator<(const BigInt& lhs, int rhs) {
     return lhs < BigInt(rhs);
 }
 constexpr bool operator<(int lhs, const BigInt& rhs) {
     return BigInt(lhs) < rhs;
 }
+constexpr bool operator<(unsigned int lhs, const BigInt& rhs) {
+    return BigInt(lhs) < rhs;
+}
 
 constexpr bool operator<=(const BigInt& lhs, const BigInt& rhs) {
     return !(rhs < lhs);
 }
-constexpr bool operator<=(const BigInt& lhs, size_t rhs) {
-    return lhs <= BigInt(rhs);
-}
-
 constexpr bool operator<=(const BigInt& lhs, long long rhs) {
     return lhs <= BigInt(rhs);
 }
+constexpr bool operator<=(const BigInt& lhs, unsigned long long rhs) {
+    return lhs <= BigInt(rhs);
+}
+
 constexpr bool operator<=(const BigInt& lhs, int rhs) {
     return lhs <= BigInt(rhs);
 }
@@ -200,32 +220,32 @@ constexpr bool operator>(const BigInt& lhs, int rhs) {
 constexpr bool operator>(int lhs, const BigInt& rhs) {
     return BigInt(lhs) > rhs;
 }
-constexpr bool operator>(size_t lhs, const BigInt& rhs) {
-    return BigInt(lhs) > rhs;
-}
-constexpr bool operator>(const BigInt& lhs, size_t rhs) {
-    return lhs > BigInt(rhs);
-}
 constexpr bool operator>(long long lhs, const BigInt& rhs) {
     return BigInt(lhs) > rhs;
 }
+constexpr bool operator>(unsigned long long lhs, const BigInt& rhs) {
+    return BigInt(lhs) > rhs;
+}
 constexpr bool operator>(const BigInt& lhs, long long rhs) {
+    return lhs > BigInt(rhs);
+}
+constexpr bool operator>(const BigInt& lhs, unsigned long long rhs) {
     return lhs > BigInt(rhs);
 }
 
 constexpr bool operator>=(const BigInt& lhs, const BigInt& rhs) {
     return !(lhs < rhs);
 }
-constexpr bool operator>=(size_t lhs, const BigInt& rhs) {
-    return BigInt(lhs) >= rhs;
-}
-constexpr bool operator>=(const BigInt& lhs, size_t rhs) {
-    return lhs >= BigInt(rhs);
-}
 constexpr bool operator>=(long long lhs, const BigInt& rhs) {
     return BigInt(lhs) >= rhs;
 }
+constexpr bool operator>=(unsigned long long lhs, const BigInt& rhs) {
+    return BigInt(lhs) >= rhs;
+}
 constexpr bool operator>=(const BigInt& lhs, long long rhs) {
+    return lhs >= BigInt(rhs);
+}
+constexpr bool operator>=(const BigInt& lhs, unsigned long long rhs) {
     return lhs >= BigInt(rhs);
 }
 constexpr bool operator>=(const BigInt& lhs, int rhs) {
@@ -247,9 +267,9 @@ constexpr BigInt& BigInt::operator++() {
         negative = !IsZero();
         return *this;
     }
-    int i = 0;
+    size_t i = 0;
     auto n = digits.size();
-    for (i = 0; i < n && digits[i] == 9; i++) {
+    for (i = 0ull; i < n && digits[i] == 9; i++) {
         digits[i] = 0;
     }
 
@@ -265,7 +285,6 @@ constexpr BigInt BigInt::operator++(int) {
 }
 
 constexpr BigInt& BigInt::operator--() {
-    int i = 0;
     auto n = digits.size();
     if (negative) {
         negative = false;
@@ -278,7 +297,9 @@ constexpr BigInt& BigInt::operator--() {
         negative = true;
         return *this;
     }
-    for (i = 0; i < n && digits[i] == 0; i++) {
+
+    size_t i = 0ull;
+    for (i = 0ull; i < n && digits[i] == 0; i++) {
         digits[i] = 9;
     }
 
@@ -323,7 +344,7 @@ constexpr BigInt& operator+=(BigInt& lhs, const BigInt& rhs) {
 
     char sum = 0;
     char carry = 0;
-    for (auto i = 0; i < lhsSize; i++) {
+    for (size_t i = 0u; i < lhsSize; i++) {
         sum = lhs.digits[i] + carry;
         if (i < rhsSize) sum += rhs.digits[i];
         carry = sum / 10;
@@ -372,13 +393,22 @@ constexpr BigInt operator+(BigInt lhs, char rhs) {
 constexpr BigInt operator+(char lhs, BigInt rhs) {
     return rhs + lhs;
 }
-constexpr BigInt& operator+=(BigInt& lhs, size_t rhs) {
+constexpr BigInt& operator+=(BigInt& lhs, long long rhs) {
     return lhs += BigInt(rhs);
 }
-constexpr BigInt operator+(BigInt lhs, size_t rhs) {
+constexpr BigInt& operator+=(BigInt& lhs, unsigned long long rhs) {
+    return lhs += BigInt(rhs);
+}
+constexpr BigInt operator+(BigInt lhs, long long rhs) {
     return lhs += rhs;
 }
-constexpr BigInt operator+(size_t lhs, BigInt rhs) {
+constexpr BigInt operator+(BigInt lhs, unsigned long long rhs) {
+    return lhs += rhs;
+}
+constexpr BigInt operator+(long long  lhs, BigInt rhs) {
+    return rhs += lhs;
+}
+constexpr BigInt operator+(unsigned long long  lhs, BigInt rhs) {
     return rhs += lhs;
 }
 
@@ -395,7 +425,10 @@ constexpr BigInt operator-(BigInt lhs, int rhs) {
     return lhs -= BigInt(rhs);
 }
 
-constexpr BigInt operator-(BigInt lhs, size_t rhs) {
+constexpr BigInt operator-(BigInt lhs, long long rhs) {
+    return lhs -= BigInt(rhs);
+}
+constexpr BigInt operator-(BigInt lhs, unsigned long long rhs) {
     return lhs -= BigInt(rhs);
 }
 
@@ -408,7 +441,10 @@ constexpr BigInt operator-(char lhs, BigInt rhs) {
 constexpr BigInt operator-(int lhs, BigInt rhs) {
     return BigInt(lhs) - rhs;
 }
-constexpr BigInt operator-(size_t lhs, BigInt rhs) {
+constexpr BigInt operator-(long long lhs, BigInt rhs) {
+    return BigInt(lhs) - rhs;
+}
+constexpr BigInt operator-(unsigned long long lhs, BigInt rhs) {
     return BigInt(lhs) - rhs;
 }
 
@@ -430,7 +466,7 @@ constexpr BigInt& operator-=(BigInt& lhs, const BigInt& rhs) {
     int diff = 0;
     auto lhsSize = lhs.digits.size();
     auto rhsSize = rhs.digits.size();
-    for (auto i = 0; i < lhsSize; i++) {
+    for (size_t i = 0u; i < lhsSize; i++) {
         diff = static_cast<int>(lhs.digits[i] + carry);
         if (i < rhsSize) {
             diff -= rhs.digits[i];
@@ -463,7 +499,10 @@ constexpr BigInt& operator-=(BigInt& lhs, char rhs) {
 constexpr BigInt& operator-=(BigInt& lhs, int rhs) {
     return lhs -= BigInt(rhs);
 }
-constexpr BigInt& operator-=(BigInt& lhs, size_t rhs) {
+constexpr BigInt& operator-=(BigInt& lhs, long long rhs) {
+    return lhs -= BigInt(rhs);
+}
+constexpr BigInt& operator-=(BigInt& lhs, unsigned long long rhs) {
     return lhs -= BigInt(rhs);
 }
 
@@ -491,8 +530,8 @@ constexpr BigInt& operator*=(BigInt& lhs, const BigInt& rhs) {
     auto lhsSize = lhs.digits.size();
     auto rhsSize = rhs.digits.size();
     std::vector<int> v(lhsSize + rhsSize, 0);
-    for (auto i = 0; i < lhsSize; i++) {
-        for (auto j = 0; j < rhsSize; j++) {
+    for (size_t i = 0u; i < lhsSize; i++) {
+        for (size_t j = 0u; j < rhsSize; j++) {
             v[i + j] += lhs.digits[i] * rhs.digits[j];
         }
     }
@@ -500,7 +539,7 @@ constexpr BigInt& operator*=(BigInt& lhs, const BigInt& rhs) {
     lhsSize = v.size();
     int carry = 0;
     int sum = 0;
-    for (auto i = 0; i < lhsSize; i++) {
+    for (size_t i = 0u; i < lhsSize; i++) {
         sum = carry + v[i];
         v[i] = sum % 10;
         carry = sum / 10;
@@ -526,7 +565,10 @@ constexpr BigInt operator*(BigInt lhs, char rhs) {
 constexpr BigInt operator*(BigInt lhs, int rhs) {
     return lhs *= rhs;
 }
-constexpr BigInt operator*(BigInt lhs, size_t rhs) {
+constexpr BigInt operator*(BigInt lhs, long long rhs) {
+    return lhs *= rhs;
+}
+constexpr BigInt operator*(BigInt lhs, unsigned long long rhs) {
     return lhs *= rhs;
 }
 constexpr BigInt operator*(bool lhs, BigInt rhs) {
@@ -538,7 +580,10 @@ constexpr BigInt operator*(char lhs, BigInt rhs) {
 constexpr BigInt operator*(int lhs, BigInt rhs) {
     return rhs * lhs;
 }
-constexpr BigInt operator*(size_t lhs, BigInt rhs) {
+constexpr BigInt operator*(long long lhs, BigInt rhs) {
+    return rhs * lhs;
+}
+constexpr BigInt operator*(unsigned long long lhs, BigInt rhs) {
     return rhs * lhs;
 }
 
@@ -555,7 +600,10 @@ constexpr BigInt& operator*=(BigInt& lhs, char rhs) {
 constexpr BigInt& operator*=(BigInt& lhs, int rhs) {
     return lhs *= BigInt(rhs);
 }
-constexpr BigInt& operator*=(BigInt& lhs, size_t rhs) {
+constexpr BigInt& operator*=(BigInt& lhs, long long rhs) {
+    return lhs *= BigInt(rhs);
+}
+constexpr BigInt& operator*=(BigInt& lhs, unsigned long long rhs) {
     return lhs *= BigInt(rhs);
 }
 
@@ -620,7 +668,10 @@ constexpr BigInt operator/(BigInt lhs, char rhs) {
 constexpr BigInt operator/(BigInt lhs, int rhs) {
     return lhs /= rhs;
 }
-constexpr BigInt operator/(BigInt lhs, size_t rhs) {
+constexpr BigInt operator/(BigInt lhs, long long rhs) {
+    return lhs /= rhs;
+}
+constexpr BigInt operator/(BigInt lhs, unsigned long long rhs) {
     return lhs /= rhs;
 }
 constexpr BigInt operator/(char lhs, const BigInt& rhs) {
@@ -631,7 +682,11 @@ constexpr BigInt operator/(int lhs, const BigInt& rhs) {
     auto a = BigInt(lhs);
     return a /= rhs;
 }
-constexpr BigInt operator/(size_t lhs, const BigInt& rhs) {
+constexpr BigInt operator/(long long lhs, const BigInt& rhs) {
+    auto a = BigInt(lhs);
+    return a /= rhs;
+}
+constexpr BigInt operator/(unsigned long long lhs, const BigInt& rhs) {
     auto a = BigInt(lhs);
     return a /= rhs;
 }
@@ -644,7 +699,10 @@ constexpr BigInt& operator/=(BigInt& lhs, char rhs) {
 constexpr BigInt& operator/=(BigInt& lhs, int rhs) {
     return lhs /= BigInt(rhs);
 }
-constexpr BigInt& operator/=(BigInt& lhs, size_t rhs) {
+constexpr BigInt& operator/=(BigInt& lhs, long long rhs) {
+    return lhs /= BigInt(rhs);
+}
+constexpr BigInt& operator/=(BigInt& lhs, unsigned long long rhs) {
     return lhs /= BigInt(rhs);
 }
 
@@ -678,7 +736,10 @@ constexpr BigInt& operator%=(BigInt& lhs, char rhs) {
 constexpr BigInt& operator%=(BigInt& lhs, int rhs) {
     return lhs %= BigInt(rhs);
 }
-constexpr BigInt& operator%=(BigInt& lhs, size_t rhs) {
+constexpr BigInt& operator%=(BigInt& lhs, long long rhs) {
+    return lhs %= BigInt(rhs);
+}
+constexpr BigInt& operator%=(BigInt& lhs, unsigned long long rhs) {
     return lhs %= BigInt(rhs);
 }
 
@@ -691,7 +752,10 @@ constexpr BigInt operator%(BigInt lhs, char rhs) {
 constexpr BigInt operator%(BigInt lhs, int rhs) {
     return lhs %= rhs;
 }
-constexpr BigInt operator%(BigInt lhs, size_t rhs) {
+constexpr BigInt operator%(BigInt lhs, long long rhs) {
+    return lhs %= rhs;
+}
+constexpr BigInt operator%(BigInt lhs, unsigned long long rhs) {
     return lhs %= rhs;
 }
 constexpr BigInt operator%(bool lhs, const BigInt& rhs) {
@@ -706,7 +770,11 @@ constexpr BigInt operator%(int lhs, const BigInt& rhs) {
     auto a = BigInt(lhs);
     return a %= rhs;
 }
-constexpr BigInt operator%(size_t lhs, const BigInt& rhs) {
+constexpr BigInt operator%(long long lhs, const BigInt& rhs) {
+    auto a = BigInt(lhs);
+    return a %= rhs;
+}
+constexpr BigInt operator%(unsigned long long lhs, const BigInt& rhs) {
     auto a = BigInt(lhs);
     return a %= rhs;
 }
@@ -810,7 +878,7 @@ constexpr BigInt& operator&=(BigInt& lhs, const BigInt& rhs) {
     size_t startB = rBin.size() - minSize;
     std::string result = std::string(maxSize - minSize, '0');
 
-    for (auto i = 0; i < minSize; i++) {
+    for (size_t i = 0u; i < minSize; i++) {
         result += ((lBin[startA + i] == '1') && (rBin[startB + i] == '1')) ? '1' : '0';
     }
     lhs = BigInt::FromBinary(result);
@@ -831,7 +899,7 @@ constexpr BigInt& operator|=(BigInt& lhs, const BigInt& rhs) {
 
     std::string result = lBin.size() == maxSize ? lBin.substr(0, maxSize - minSize) : rBin.substr(0, maxSize - minSize);
 
-    for (auto i = 0; i < minSize; i++) {
+    for (size_t i = 0u; i < minSize; i++) {
         result += ((lBin[startA + i] == '1') || (rBin[startB + i] == '1')) ? '1' : '0';
     }
     lhs = BigInt::FromBinary(result);
@@ -851,7 +919,7 @@ constexpr BigInt operator^=(BigInt& lhs, const BigInt& rhs) {
     size_t startB = rBin.size() - minSize;
     std::string result = lBin.size() == maxSize ? lBin.substr(0, maxSize - minSize) : rBin.substr(0, maxSize - minSize);
 
-    for (auto i = 0; i < minSize; i++) {
+    for (size_t i = 0u; i < minSize; i++) {
         result += (lBin[startA + i] != rBin[startB + i]) ? '1' : '0';
     }
     lhs = BigInt::FromBinary(result);
@@ -872,6 +940,9 @@ constexpr BigInt::operator long long() const {
 }
 constexpr BigInt::operator unsigned long long() const {
     return to_ull();
+}
+constexpr BigInt::operator double() const {
+	return static_cast<double>(to_ll());
 }
 
 constexpr bool BigInt::is_ull() const {

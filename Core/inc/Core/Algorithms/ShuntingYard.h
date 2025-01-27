@@ -62,13 +62,13 @@ namespace ShuntingYard {
 
             if (positions.size() == 1) {
                 if (firstOpenParen != token.npos) {
-                    for (auto i = 0; i < token.size(); i++) {
+                    for (size_t i = 0u; i < token.size(); i++) {
                         operatorStack.push("(");
                     }
                 }
                 else if (firstNum != token.npos) outputQueue.push(token);
                 else if (firstCloseParen != token.npos) {
-                    for (auto i = 0; i < token.size(); i++) {
+                    for (size_t i = 0u; i < token.size(); i++) {
                         while (true) {
                             auto next = operatorStack.pop();
                             if (next == "(") break;

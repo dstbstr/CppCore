@@ -49,13 +49,13 @@ namespace Constexpr {
 
             static_assert(TestParseNumber("42", 42));
             static_assert(TestParseNumber("-42", -42));
-            static_assert(TestParseNumber("0", unsigned int(0)));
-            static_assert(!TestParseNumber("-1", int(1)));
+            static_assert(TestParseNumber("0", 0u));
+            static_assert(!TestParseNumber("-1", 1u));
             static_assert(!TestParseNumber("abc", 0));
             if(!TestParseNumber("42", 42)) return false;
             if(!TestParseNumber("-42", -42)) return false;
-            if(!TestParseNumber("0", unsigned int(0))) return false;
-            if(TestParseNumber("-1", int(1))) return false;
+            if(!TestParseNumber("0", 0u)) return false;
+            if(TestParseNumber("-1", 1u)) return false;
             if(TestParseNumber("abc", 0)) return false;
 
             static_assert(HexToDec('0') == 0);
