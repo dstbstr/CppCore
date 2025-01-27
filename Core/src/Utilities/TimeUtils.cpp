@@ -109,10 +109,10 @@ namespace TimeUtils {
     }
 
 	std::string NowLocalToString(const char* format) {
-		return TimePointLocalToString(c::now(), format);
+		return TimePointLocalToString(c::now(), format ? format : DefaultTimeFormat);
 	}
 	std::string NowUtcToString(const char* format) {
-		return TimePointUtcToString(c::now(), format);
+		return TimePointUtcToString(c::now(), format ? format : DefaultTimeFormat);
     }
 
     std::string DurationToString(const std::chrono::microseconds& duration, TimeUnit minUnit) {

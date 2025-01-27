@@ -44,7 +44,7 @@ TEST(TimeUtils, CanFormatTodayNow) {
 
 TEST(TimeUtils, CanExtractTimeFromString) {
     const std::string format = "%Y_%m_%d %H_%M_%S";
-    std::string timeString = TimeUtils::TodayNowUtcToString(format);
+    std::string timeString = TimeUtils::TodayNowUtcToString(format.c_str());
     auto time = TimeUtils::StringToTimePoint(timeString, format);
 
     ASSERT_TRUE(std::chrono::system_clock::now() - time < std::chrono::duration(std::chrono::seconds(1)));

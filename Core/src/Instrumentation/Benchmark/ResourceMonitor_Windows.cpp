@@ -128,6 +128,9 @@ void ResourceMonitor::Start() {
 	case MonitorType::Cpu:
 		m_MonitorThread = StartMonitor<CpuMonitor>(m_Interval, m_DoneFlag, m_Stats);
 		break;
+	case MonitorType::TestOnly:
+		m_MonitorThread = StartMonitor<TestOnlyMonitor>(m_Interval, m_DoneFlag, m_Stats);
+		break;
 	}
 }
 

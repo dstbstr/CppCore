@@ -21,7 +21,7 @@ auto WhenAll(auto tasks, ProgressCallback progressCallback = nullptr) {
 	}
 
     return std::async(std::launch::async, [tasks, progressCallback]() {
-        u64 MaxConcurrency = std::max(1ull, static_cast<u64>(std::thread::hardware_concurrency()));
+        uint64_t MaxConcurrency = std::max(1ull, static_cast<uint64_t>(std::thread::hardware_concurrency()));
         std::vector<std::future<ReturnType>> futures;
         auto copy = tasks;
         size_t finishedTasks = 0;

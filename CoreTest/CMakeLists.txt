@@ -22,6 +22,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 	src/Instrumentation/Logging.test.cpp
 	src/Instrumentation/Benchmark/Stats.test.cpp
+	src/Instrumentation/Benchmark/ResourceMonitor.test.cpp
 
 	src/Macros/PreProcessorOverride.test.cpp
 

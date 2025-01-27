@@ -39,4 +39,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 	src/BigInt.cpp
 	src/Concepts.tests.cpp
- )
+  "src/Instrumentation/Benchmark/Stats.cpp")

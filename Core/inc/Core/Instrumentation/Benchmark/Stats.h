@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include <format>
+#include <iosfwd>
 
 #include "Core/Platform/Types.h"
 #include "Core/Constexpr/ConstexprMath.h"
@@ -32,19 +33,7 @@ struct Stats {
 		StdDev = Constexpr::Sqrt(variance);
 	}
 
-	std::ostream& operator<<(std::ostream& stream) {
-		stream << std::format(
-			"Mean: {:.2f}\n"
-			"Median: {:.2f}\n"
-			"Min: {:.2f}\n"
-			"Max: {:.2f}\n"
-			"StdDev: {:.2f}\n"
-			"75%: {:.2f}\n"
-			"90%: {:.2f}\n"
-			"99%: {:.2f}",
-			Mean, Median, Min, Max, StdDev, Percent75, Percent90, Percent99);
-		return stream;
-	}
+	std::ostream& operator<<(std::ostream& stream);
 
 	f64 Mean{0};
 	f64 Median{0};
