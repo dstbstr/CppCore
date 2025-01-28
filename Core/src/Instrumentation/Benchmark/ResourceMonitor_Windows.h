@@ -43,50 +43,48 @@ namespace ResourceImpl {
 	};
 
 	struct CpuMonitor {
+		struct CpuData {
+			ULARGE_INTEGER Cpu{};
+			ULARGE_INTEGER SysCpu{};
+			ULARGE_INTEGER UserCpu{};
+			FILETIME Time{};
+			FILETIME SysTime{};
+			FILETIME UserTime{};
+
+			static CpuData Get(HANDLE process) {
+				CpuData data;
+				GetSystemTimeAsFileTime(&data.Time);
+				memcpy(&data.Cpu, &data.Time, sizeof(FILETIME));
+				if (!GetProcessTimes(process, &data.Time, &data.Time, &data.SysTime, &data.UserTime)) throw "Wat?";
+				memcpy(&data.SysCpu, &data.SysTime, sizeof(FILETIME));
+				memcpy(&data.UserCpu, &data.UserTime, sizeof(FILETIME));
+				return data;
+			}
+		};
+
 		CpuMonitor(StatHolder& stats) : Stats(stats) {
 			SYSTEM_INFO sysInfo;
 			GetSystemInfo(&sysInfo);
 			m_ProcCount = sysInfo.dwNumberOfProcessors;
-
-			GetSystemTimeAsFileTime(&m_Ftime);
-			memcpy(&m_LastCpu, &m_Ftime, sizeof(FILETIME));
-
 			m_ProcessHandle = GetCurrentProcess();
-			if (!GetProcessTimes(m_ProcessHandle, &m_Ftime, &m_Ftime, &m_Fsys, &m_Fuser)) throw "Wat?";
-			memcpy(&m_LastSysCpu, &m_Fsys, sizeof(FILETIME));
-			memcpy(&m_LastUserCpu, &m_Fuser, sizeof(FILETIME));
+
+			m_Previous = CpuData::Get(m_ProcessHandle);
 		}
 		
 		void Update() {
-			GetSystemTimeAsFileTime(&m_Ftime);
-			ULARGE_INTEGER now;
-			memcpy(&now, &m_Ftime, sizeof(FILETIME));
-			if (!GetProcessTimes(m_ProcessHandle, &m_Ftime, &m_Ftime, &m_Fsys, &m_Fuser)) throw "Wat?";
-
-			ULARGE_INTEGER sys, user;
-			memcpy(&sys, &m_Fsys, sizeof(FILETIME));
-			memcpy(&user, &m_Fuser, sizeof(FILETIME));
-
-			auto percent = static_cast<f64>((sys.QuadPart - m_LastSysCpu.QuadPart) + 
-				(user.QuadPart - m_LastUserCpu.QuadPart));
-			percent /= (now.QuadPart - m_LastCpu.QuadPart);
+			auto current = CpuData::Get(m_ProcessHandle);
+			auto percent = static_cast<f64>((current.SysCpu.QuadPart - m_Previous.SysCpu.QuadPart) +
+				(current.UserCpu.QuadPart - m_Previous.UserCpu.QuadPart));
+			percent /= (current.Cpu.QuadPart - m_Previous.Cpu.QuadPart);
 			percent /= m_ProcCount;
-
-			m_LastCpu = now;
-			m_LastUserCpu = user;
-			m_LastSysCpu = sys;
+			m_Previous = current;
 
 			Stats.Add(percent);
 		}
 
 		StatHolder& Stats;
 	private:
-		ULARGE_INTEGER m_LastCpu {0};
-		ULARGE_INTEGER m_LastSysCpu {0};
-		ULARGE_INTEGER m_LastUserCpu {0};
-		FILETIME m_Ftime {0};
-		FILETIME m_Fsys {0};
-		FILETIME m_Fuser {0};
+		CpuData m_Previous;
 		int m_ProcCount {0};
 		HANDLE m_ProcessHandle;
 	};

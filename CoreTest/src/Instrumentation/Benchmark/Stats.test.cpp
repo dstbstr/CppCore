@@ -1,6 +1,7 @@
 #include "Core/Instrumentation/Benchmark/Stats.h"
 
 // All stats are 0 by default
+static_assert(Stats({}).Count == 0);
 static_assert(Stats({}).Mean == 0.0);
 static_assert(Stats({}).Median == 0.0);
 static_assert(Stats({}).Min == 0.0);
@@ -11,6 +12,7 @@ static_assert(Stats({}).Percent90 == 0.0);
 static_assert(Stats({}).Percent99 == 0.0);
 
 // Single value stats
+static_assert(Stats({ 100.0 }).Count == 1);
 static_assert(Stats({ 1.0 }).Mean == 1.0);
 static_assert(Stats({ 1.0 }).Median == 1.0);
 static_assert(Stats({ 1.0 }).Min == 1.0);

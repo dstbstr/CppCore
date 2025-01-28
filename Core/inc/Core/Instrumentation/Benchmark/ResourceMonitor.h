@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <optional>
+#include <thread>
 
 #include "Core/Instrumentation/Benchmark/Stats.h"
 
