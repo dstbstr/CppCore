@@ -24,7 +24,10 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Constexpr/ConstexprStrUtils.cpp
 
 	src/Instrumentation/ISink.cpp
-	"src/Instrumentation/Benchmark/ResourceMonitor_Windows.h"
+	src/Instrumentation/Benchmark/ResourceMonitor_Windows.h
+	src/Instrumentation/Benchmark/ResourceMonitor_Linux.h
+	src/Instrumentation/Benchmark/ResourceMonitor.cpp
+	src/Instrumentation/Benchmark/Stats.cpp
 	src/Instrumentation/Logging.cpp
 	src/Instrumentation/LogWriter/StdOutLogWriter.cpp
 
@@ -39,4 +42,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 	src/BigInt.cpp
 	src/Concepts.tests.cpp
-  "src/Instrumentation/Benchmark/Stats.cpp" "src/Instrumentation/Benchmark/ResourceMonitor_Linux.h" "src/Instrumentation/Benchmark/ResourceMonitor.cpp")
+)

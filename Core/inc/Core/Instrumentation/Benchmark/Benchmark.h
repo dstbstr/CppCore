@@ -83,7 +83,8 @@ namespace Benchmark {
 
 			Result<Ret> result{
 				.RuntimeStats = runtimeStats.GetStats(ToUnit(m_RuntimeResolution)),
-				.ReturnValue = resultValue
+				.ReturnValue = resultValue,
+				.MonitorStats = {}
 			};
 
 			result.RuntimeStats *= ToFactor(m_RuntimeResolution);
