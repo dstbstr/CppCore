@@ -30,6 +30,22 @@ namespace Constexpr {
         return lhs < rhs ? rhs - lhs : lhs - rhs;
     }
 
+    template<typename T>
+    constexpr T Min(T a) { return a; }
+	template<typename T, typename... Args>
+    constexpr T Min(T a, Args... args) {
+        auto b = Min(args...);
+        return a < b ? a : b;
+    }
+
+    template<typename T>
+	constexpr T Max(T a) { return a; }
+	template<typename T, typename... Args>
+    constexpr T Max(T a, Args... args) {
+        auto b = Max(args...);
+        return a > b ? a : b;
+	}
+
     constexpr size_t CountDigits(Numeric auto val) {
         return Constexpr::ToString(val).size();
     }
