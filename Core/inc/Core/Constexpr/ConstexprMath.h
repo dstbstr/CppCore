@@ -409,13 +409,23 @@ namespace Constexpr {
     constexpr T FindLcm() {
         return detail::FindLcm<T>(GetAllPrimeFactors<Lhs, T>(), GetAllPrimeFactors<Rhs, T>());
     }
-
     
     constexpr auto FindGcd(auto... args) {
         auto product = (args * ... * 1);
         auto lcm = FindLcm<decltype(product)>(args...);
         return product == 0 ? lcm : product / lcm;
     }
+
+    constexpr auto Gcd(auto a, auto b) {
+        if (b == 0) return a;
+        return Gcd(b, a % b);
+	}
+    constexpr auto Lcm(auto a, auto b) {
+        if (a == 0 || b == 0) return 0;
+        return (a / Gcd(a, b)) * b;
+	}
+    static_assert(Lcm(12, 18) == 36);
+    static_assert(Lcm(3, 3) == 3);
 
     template<typename T>
     constexpr bool Eval(T lhs, T rhs, std::string_view op) {
