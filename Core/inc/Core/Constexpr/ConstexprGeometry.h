@@ -195,6 +195,11 @@ struct Vec3 {
         return Vec3<T>(val, val, val);
     }
 
+    constexpr double Dist(const Vec3<T>& other) const {
+        auto diff = *this - other;
+		return Constexpr::Sqrt(static_cast<double>(diff.X * diff.X + diff.Y * diff.Y + diff.Z * diff.Z));
+    }
+
     constexpr bool operator==(const Vec3<T>& v) const = default;
 
     constexpr Vec3<T>& operator+=(const Vec3<T>& v) {
@@ -758,6 +763,13 @@ struct Rect {
     constexpr bool Contains(const Vec2<T>& p) {
         return TopLeft.X <= p.X && p.X <= BottomRight.X &&
             TopLeft.Y <= p.Y && p.Y <= BottomRight.Y;
+    }
+
+    constexpr T InnerArea() const {
+        return (BottomRight.X - TopLeft.X) * (BottomRight.Y - TopLeft.Y);
+    }
+    constexpr T OuterArea() const {
+		return (BottomRight.X - TopLeft.X + 1) * (BottomRight.Y - TopLeft.Y + 1);
     }
 };
 
