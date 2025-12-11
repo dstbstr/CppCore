@@ -418,7 +418,14 @@ constexpr u64 MDistance(const RowCol& lhs, const RowCol& rhs) {
     return static_cast<u64>(Constexpr::AbsDistance(lhs.Row, rhs.Row)) + Constexpr::AbsDistance(lhs.Col, rhs.Col);
 }
 
+template<typename T>
+concept HasXY = requires(T t) {
+    t.X;
+    t.Y;
+};
+
 template<template<typename> typename Container, typename T>
+	requires HasXY<Container<T>>
 constexpr u64 MDistance(Container<T> p) {
     using Raw = std::remove_cvref_t<Container<T>>;
     T sum = Constexpr::Abs(p.X) + Constexpr::Abs(p.Y);
@@ -433,6 +440,7 @@ constexpr u64 MDistance(Container<T> p) {
 }
 
 template<template<typename> typename Container, typename T>
+	requires HasXY<Container<T>>
 constexpr u64 MDistance(Container<T> a, Container<T> b) {
     using Raw = std::remove_cvref_t<Container<T>>;
     T sum = Constexpr::AbsDistance(a.X, b.X) + Constexpr::AbsDistance(a.Y, b.Y);
@@ -448,6 +456,7 @@ constexpr u64 MDistance(Container<T> a, Container<T> b) {
 
 namespace _Impl {
     template<template<typename> typename Container, typename T>
+		requires HasXY<Container<T>>
     constexpr std::vector<Container<T>> GetDeltas() {
         using Raw = std::remove_cvref_t<Container<T>>;
 
@@ -467,6 +476,7 @@ namespace _Impl {
 }
 
 template<template<typename> typename Container, typename T>
+	requires HasXY<Container<T>>
 constexpr std::vector<Container<T>> GetDirectNeighbors(Container<T> pos) {
     std::vector<Container<T>> result;
     for (auto delta : _Impl::GetDeltas<Container, T>()) {
@@ -478,6 +488,7 @@ constexpr std::vector<Container<T>> GetDirectNeighbors(Container<T> pos) {
 }
 
 template<template<typename> typename Container, typename T>
+	requires HasXY<Container<T>>
 constexpr std::vector<Container<T>> GetDirectNeighbors(Container<T> pos, Container<T> max, Container<T> min = {}) {
     std::vector<Container<T>> result;
     Container<T> temp;
@@ -493,6 +504,7 @@ constexpr std::vector<Container<T>> GetDirectNeighbors(Container<T> pos, Contain
 }
 
 template<template<typename> typename Container, typename T>
+	requires HasXY<Container<T>>
 constexpr std::vector<Container<T>> GetAllNeighbors(const Container<T>& pos) {
     std::vector<Container<T>> result{};
     for (auto d : _Impl::GetDeltas<Container, T>()) {
@@ -509,6 +521,7 @@ constexpr std::vector<Container<T>> GetAllNeighbors(const Container<T>& pos) {
 }
 
 template<template<typename> typename Container, typename T>
+	requires HasXY<Container<T>>
 constexpr std::vector<Container<T>> GetAllNeighbors(Container<T> pos, Container<T> max, Container<T> min = {}) {
     std::vector<Container<T>> result;
     Container<T> temp;

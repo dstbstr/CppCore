@@ -314,11 +314,22 @@ constexpr std::optional<std::vector<T>> AStarMin(const AStarParameters<T, Map>& 
         .map = params.map,
         .start = params.start,
         .end = params.end,
+        //.costFunc = params.costFunc ? *params.costFunc : AStarPrivate::FallbackCostFunc<T>,
+        //.doneFunc = params.doneFunc ? *params.doneFunc : AStarPrivate::FallbackDoneFunc<T>,
+        //.hFunc = params.hFunc ? *params.hFunc : AStarPrivate::FallbackHFunc<T>,
+        //.nFunc = params.nFunc ? *params.nFunc : AStarPrivate::FallbackNFunc<T, Map>,
+        //.moveFunc = params.moveFunc ? *params.moveFunc : AStarPrivate::FallbackMoveFunc<T>
         .costFunc = params.costFunc.value_or(AStarPrivate::FallbackCostFunc<T>),
         .doneFunc = params.doneFunc.value_or(AStarPrivate::FallbackDoneFunc<T>),
         .hFunc = params.hFunc.value_or(AStarPrivate::FallbackHFunc<T>),
         .nFunc = params.nFunc.value_or(AStarPrivate::FallbackNFunc<T, Map>),
         .moveFunc = params.moveFunc.value_or(AStarPrivate::FallbackMoveFunc<T>)
+        //.costFunc = params.costFunc.value_or([]{ return AStarPrivate::FallbackCostFunc<T>;}()),
+        //.doneFunc = params.doneFunc.value_or([]{ return AStarPrivate::FallbackDoneFunc<T>;}()),
+        //.hFunc = params.hFunc.value_or([]{ return AStarPrivate::FallbackHFunc<T>;}()),
+        //.nFunc = params.nFunc.value_or([]{ return AStarPrivate::FallbackNFunc<T, Map>;}()),
+        //.moveFunc = params.moveFunc.value_or([]{ return AStarPrivate::FallbackMoveFunc<T>;}())
+
     });
 }
 
@@ -329,11 +340,22 @@ constexpr std::optional<std::vector<T>> AStarMax(const AStarParameters<T, Map>& 
         .map = params.map,
         .start = params.start,
         .end = params.end,
+		//.costFunc = params.costFunc ? *params.costFunc : AStarPrivate::FallbackCostFunc<T>,
+		//.doneFunc = params.doneFunc ? *params.doneFunc : AStarPrivate::FallbackDoneFunc<T>,
+		//.hFunc = params.hFunc ? *params.hFunc : AStarPrivate::FallbackHFunc<T>,
+		//.nFunc = params.nFunc ? *params.nFunc : AStarPrivate::FallbackNFunc<T, Map>,
+		//.moveFunc = params.moveFunc ? *params.moveFunc : AStarPrivate::FallbackMoveFunc<T>
         .costFunc = params.costFunc.value_or(AStarPrivate::FallbackCostFunc<T>),
         .doneFunc = params.doneFunc.value_or(AStarPrivate::FallbackDoneFunc<T>),
         .hFunc = params.hFunc.value_or(AStarPrivate::FallbackHFunc<T>),
         .nFunc = params.nFunc.value_or(AStarPrivate::FallbackNFunc<T>),
         .moveFunc = params.moveFunc.value_or(AStarPrivate::FallbackMoveFunc<T>)
+        //.costFunc = params.costFunc.value_or([] { return AStarPrivate::FallbackCostFunc<T>; }()),
+        //.doneFunc = params.doneFunc.value_or([] { return AStarPrivate::FallbackDoneFunc<T>; }()),
+        //.hFunc = params.hFunc.value_or([] { return AStarPrivate::FallbackHFunc<T>; }()),
+        //.nFunc = params.nFunc.value_or([] { return AStarPrivate::FallbackNFunc<T, Map>; }()),
+        //.moveFunc = params.moveFunc.value_or([] { return AStarPrivate::FallbackMoveFunc<T>; }())
+
     });
 }
 
